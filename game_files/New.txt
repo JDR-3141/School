@@ -1,0 +1,12 @@
+Rook.black.False,Pawn.black.False,False,False,False,False,Pawn.white.False,Rook.white.False,None,None
+False,Pawn.black.False,False,False,False,False,Pawn.white.False,Knight.white.None,None,None
+Bishop.black.None,Pawn.black.False,Knight.black.None,False,Bishop.white.None,False,Pawn.white.False,Bishop.white.None,None,None
+Queen.black.None,Pawn.black.False,False,False,False,False,Pawn.white.False,Queen.white.None,None,None
+King.black.None,False,False,Pawn.black.True,Pawn.white.True,False,False,King.white.None,None,None
+Bishop.black.None,Pawn.black.False,False,False,False,Knight.white.None,Pawn.white.False,False,None,None
+Knight.black.None,Pawn.black.False,False,False,False,False,Pawn.white.False,False,None,None
+Rook.black.False,Pawn.black.False,False,False,False,False,Pawn.white.False,Rook.white.False,None,None
+None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None
+None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None
+5,7,2,4
+black

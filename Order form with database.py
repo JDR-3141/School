@@ -3,6 +3,7 @@
 # Imports
 
 from tkinter import *
+import sqlite3
 
 ##########################################################################################################
 
@@ -123,6 +124,15 @@ def finish_order():
     for widget in window.winfo_children():
         if type(widget) != Menu:
             widget.destroy()
+    #create database connection
+    conn = sqlite3.connect("main.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO main_tbl (order_id, item_name, item_quantity, item_price) VALUES (?,?,?,?)",
+                   (
+                       # here
+                   ))
+    conn.commit()
+    conn.close()
 
 def view_order():
     choose(Order.orders)

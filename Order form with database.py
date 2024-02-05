@@ -97,15 +97,19 @@ def validate_price(price):
     dp = price.split(".")[-1]
     if len(dp) > 2:
         return False
+    num = price.replace(".", "")
+    if not num.isnumeric():
+        return False
+    return True
     
 
 def add_item_to_order(e1, e2, e3, text):
     current_order = Order.orders[-1]
-    if e2.get.is_numeric() 
-    current_order.add_item(e1.get(), e2.get(), e3.get())
-    text_add(e1.get(), text)
-    for entry in [e1, e2, e3]:
-        clear_text(entry)
+    if e2.get().isnumeric() and validate_price(e3.get()):
+        current_order.add_item(e1.get(), e2.get(), e3.get())
+        text_add(e1.get(), text)
+        for entry in [e1, e2, e3]:
+            clear_text(entry)
 
 def name_order(e1, text):
     Order.orders[-1].set_order_name(e1.get())

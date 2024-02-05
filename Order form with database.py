@@ -231,7 +231,7 @@ def display_order(order):
             widget.destroy()
     text = Order.orders[order].get_order_name() + ":"
     for item in Order.orders[order].get_order_details():
-        text += "\n" + item.get_item_name() # add 
+        text += "\n" + item.get_item_name() + " x " + str(item.get_quantity()) + " (£" + str(item.get_price()) + " each)"# add 
     label = Label(window, text=text, justify="left")
     label.place(relx=0.5, rely=0.5, anchor=CENTER)
 

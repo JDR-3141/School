@@ -91,10 +91,17 @@ def new_order(label):
     Order()
     label.place_forget()
     order_name()
-   
+
+
+def validate_price(price):
+    dp = price.split(".")[-1]
+    if len(dp) > 2:
+        return False
+    
 
 def add_item_to_order(e1, e2, e3, text):
     current_order = Order.orders[-1]
+    if e2.get.is_numeric() 
     current_order.add_item(e1.get(), e2.get(), e3.get())
     text_add(e1.get(), text)
     for entry in [e1, e2, e3]:

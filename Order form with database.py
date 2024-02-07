@@ -94,7 +94,7 @@ class Order():
 
 def new_order(label):
     Order()
-    label.place_forget()
+    label.delete()
     order_name()
 
 
@@ -144,6 +144,23 @@ def save_to_db(item):
                    ))
     conn.commit()
     conn.close()
+    load_from_db()
+
+def load_from_db():
+    conn = sqlite3.connect('U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\main.db')
+    cursor = conn.cursor()
+    cursor.execute('''SELECT * from order_tbl''')
+    #Fetching 1st row from the table
+    result = cursor.fetchall()
+    print(result)
+    conn.commit()
+    conn.close()
+    order_num = 0
+    for item in result:
+        if item[0] != order_num:
+            Order()
+        Order.orders[-1].add_item(item[1], item[2], item[3])
+        
 
 def view_order():
     choose(Order.orders)
@@ -268,6 +285,7 @@ def display_order(order):
     label.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 # run the gui
+load_from_db()
 window.mainloop()
 
 #######################################################################################################

@@ -19,10 +19,11 @@ import sqlite3
 
 class Item():
 
-    def __init__(self, item_name, quantity, price):
+    def __init__(self, item_name, quantity, price, order):
         self.item_name = item_name
         self.quantity = quantity
         self.price = price
+        self.order = order
         print(self.item_name)
 
     def __str__(self):
@@ -45,6 +46,9 @@ class Item():
    
     def set_price(self, new):
         self.price = new
+        
+    def get_order(self):
+        return self.order
 
 
 
@@ -80,7 +84,7 @@ class Order():
    
     def add_item(self, item_name, quantity, price):
         """Add each item to the objects list of items for each order"""
-        self.order_details.append(Item(item_name, quantity, price))
+        self.order_details.append(Item(item_name, quantity, price, self))
 
 #############################################################################################################
 
@@ -123,13 +127,20 @@ def name_order(e1, text):
 def finish_order():
     for widget in window.winfo_children():
         if type(widget) != Menu:
-            widget.destroy()
+            widget.destroy()#
+    for item in Order.orders[-1].get_order_details():
+        save_to_db(item)
+
+def save_to_db(item):
     #create database connection
-    conn = sqlite3.connect("main.db")
+    conn = sqlite3.connect("U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\main.db")
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO main_tbl (order_id, item_name, item_quantity, item_price) VALUES (?,?,?,?)",
+    cursor.execute("INSERT INTO order_tbl (orderID, item_name, item_quantity, item_price) VALUES (?,?,?,?)",
                    (
-                       # here
+                       item.get_order().get_order_num(),
+                       item.get_item_name(),
+                       item.get_quantity(),
+                       item.get_price()
                    ))
     conn.commit()
     conn.close()

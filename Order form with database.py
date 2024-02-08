@@ -94,8 +94,12 @@ class Order():
 
 def new_order(label):
     Order()
-    label.delete()
+    for widget in window.winfo_children():
+        if type(widget) != Menu:
+            widget.destroy()
     order_name()
+
+
 
 
 def validate_price(price):
@@ -122,6 +126,15 @@ def name_order(e1, text):
     for widget in window.winfo_children():
         if type(widget) != Menu:
             widget.destroy()
+    conn = sqlite3.connect("U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\main.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO order_tbl (orderID, order_name) VALUES (?,?)",
+                (
+                    Order.orders[-1].get_order_num(),
+                    Order.orders[-1].get_order_name()
+                ))
+    conn.commit()
+    conn.close()
     enter_text(text)
    
 def finish_order():
@@ -135,7 +148,7 @@ def save_to_db(item):
     #create database connection
     conn = sqlite3.connect("U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\main.db")
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO order_tbl (orderID, item_name, item_quantity, item_price) VALUES (?,?,?,?)",
+    cursor.execute("INSERT INTO item_tbl (orderID, item_name, item_quantity, item_price) VALUES (?,?,?,?)",
                    (
                        item.get_order().get_order_num(),
                        item.get_item_name(),
@@ -149,17 +162,21 @@ def save_to_db(item):
 def load_from_db():
     conn = sqlite3.connect('U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\main.db')
     cursor = conn.cursor()
-    cursor.execute('''SELECT * from order_tbl''')
-    #Fetching 1st row from the table
+    cursor.execute('''SELECT * from item_tbl''')
     result = cursor.fetchall()
     print(result)
+    cursor.execute('''SELECT * from order_tbl''')
+    orders = cursor.fetchall()
     conn.commit()
     conn.close()
     order_num = 0
     for item in result:
         if item[0] != order_num:
             Order()
+            order_num = item[0]
         Order.orders[-1].add_item(item[1], item[2], item[3])
+    for i in range(len(orders)):
+        Order.orders[i].set_order_name(orders[i][1])
         
 
 def view_order():

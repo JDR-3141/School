@@ -1,5 +1,6 @@
 import tkinter as tk
 import sqlite3
+from os import getcwd
 
 # Function to validate the login
 def validate_login():
@@ -57,15 +58,15 @@ class User():
 
     def save(self):
         #create database connection
-        conn = sqlite3.connect("U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\Accounts.db")
+        conn = sqlite3.connect(getcwd()+"\\accounts.db")
         cursor = conn.cursor()
         cursor.execute("INSERT INTO Users (Username, Password, Email, Date) VALUES (?,?,?,?)",
                 (
-                    self.username
-                    self.password
-                    self.email
+                    self.username,
+                    self.password,
+                    self.email,
                     self.date
                 ))
         conn.commit()
         conn.close()
-        load_from_db()
+        #load_from_db()

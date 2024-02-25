@@ -2,6 +2,38 @@ import tkinter as tk
 import sqlite3
 from os import getcwd
 
+
+class User():
+    users = []
+    def __init__(self, username, password, email, date):
+        self.username = username
+        self.password = password
+        self.email = email
+        self.date = date#
+        User.users.append(self)
+
+    def save(self):
+        #create database connection
+        conn = sqlite3.connect(getcwd()+"\\accounts.db")
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO Users (Username, Password, Email, Date) VALUES (?,?,?,?)",
+                (
+                    self.username,
+                    self.password,
+                    self.email,
+                    self.date
+                ))
+        conn.commit()
+        conn.close()
+        #load_from_db()
+
+def save_to_database():
+    for user in User.users:
+        user.save()
+
+def load_from_database():
+    pass
+
 # Function to validate the login
 def validate_login():
     userid = username_entry.get()
@@ -49,24 +81,3 @@ signin_button.grid(row=0,column=0,padx=(5, 5))
 # Start the Tkinter event loop
 parent.mainloop()
 
-class User():
-    def __init__(self, username, password, email, date):
-        self.username = username
-        self.password = password
-        self.email = email
-        self.date = date#
-
-    def save(self):
-        #create database connection
-        conn = sqlite3.connect(getcwd()+"\\accounts.db")
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO Users (Username, Password, Email, Date) VALUES (?,?,?,?)",
-                (
-                    self.username,
-                    self.password,
-                    self.email,
-                    self.date
-                ))
-        conn.commit()
-        conn.close()
-        #load_from_db()

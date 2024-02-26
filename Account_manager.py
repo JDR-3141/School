@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import sqlite3
 from os import getcwd
 
@@ -35,9 +36,79 @@ def load_from_database():
     pass
 
 # Function to validate the login
-def validate_login():
+def validate_login(username_entry, password_entry):
     userid = username_entry.get()
     password = password_entry.get()
+
+def validate_signup(username_entry, password_entry):
+    userid = username_entry.get()
+    password = password_entry.get()
+    errors = []
+    if userid == "":
+        errors.append(["Username", "Username must not be blank"])
+    if password == "":
+        errors.append(["Password", "Password must not be blank"])
+    elif password.isnumeric():
+        errors.append(["Password", "Password must contain letters"])
+    elif password.isalpha():
+        errors.append(["Password", "Password must contain numbers"])
+    else:
+        res = False
+        for ele in password:
+            if ele.isupper():
+                res = True
+                break
+        if not res:
+            errors.append(["Password", "Password must contain at least 1 uppercase letter"])
+    if len(errors) != 0:
+        first = ""
+        second = ""
+        for error in errors:
+            first += error[0] + " & "
+            second += error[1] + "\n"
+        first = first.rstrip(" & ")
+        first += " Invalid"
+        second = second.rstrip("\n")
+        messagebox.showerror(first, second)
+
+def show():
+    password_entry.config(show='')
+    show_button.grid_forget()
+    hide_button.grid(row=1,column=2)
+
+def hide():
+    password_entry.config(show='*')
+    hide_button.grid_forget()
+    show_button.grid(row=1,column=2)
+
+def default_screen():
+    for widget in parent.winfo_children():
+        if type(widget) != tk.Menu:
+            widget.destroy()
+    # Create and place the username label and entry
+    username_label = tk.Label(parent, text="Username:")
+    username_label.pack()
+
+    username_entry = tk.Entry(parent)
+    username_entry.pack()
+
+    # Create and place the password label and entry
+    password_label = tk.Label(parent, text="Password:")
+    password_label.pack()
+
+    password_entry = tk.Entry(parent, show="*")  # Show asterisks for password
+    password_entry.pack()
+
+    frame = tk.Frame(parent)
+    frame.pack()
+
+    # Create and place the login button
+    login_button = tk.Button(frame, text="Log in", command=lambda: validate_login(username_entry, password_entry))
+    login_button.grid(row=0,column=1,padx=(5, 5))
+
+    # Create and place the login button
+    signin_button = tk.Button(frame, text="Sign up", command=lambda: validate_signup(username_entry, password_entry))
+    signin_button.grid(row=0,column=0,padx=(5, 5))
 
 # Create the main window
 parent = tk.Tk()
@@ -53,31 +124,8 @@ item.add_command(label="Change details")#, command=lambda: return)
 menu.add_cascade(label="Options", menu = item)
 parent.config(menu=menu)
 
-# Create and place the username label and entry
-username_label = tk.Label(parent, text="Username:")
-username_label.pack()
-
-username_entry = tk.Entry(parent)
-username_entry.pack()
-
-# Create and place the password label and entry
-password_label = tk.Label(parent, text="Password:")
-password_label.pack()
-
-password_entry = tk.Entry(parent, show="*")  # Show asterisks for password
-password_entry.pack()
-
-frame = tk.Frame(parent)
-frame.pack()
-
-# Create and place the login button
-login_button = tk.Button(frame, text="Log in", command=validate_login)
-login_button.grid(row=0,column=1,padx=(5, 5))
-
-# Create and place the login button
-signin_button = tk.Button(frame, text="Sign in", command=validate_login)
-signin_button.grid(row=0,column=0,padx=(5, 5))
-
 # Start the Tkinter event loop
+default_screen()
 parent.mainloop()
+
 

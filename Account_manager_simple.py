@@ -6,23 +6,17 @@ from os import getcwd
 
 class User():
     users = []
-    def __init__(self, username, password, email, date):
+    def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.email = email
-        self.date = date#
         User.users.append(self)
-
-    def save(self):
         #create database connection
         conn = sqlite3.connect(getcwd()+"\\accounts.db")
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO Users (Username, Password, Email, Date) VALUES (?,?,?,?)",
+        cursor.execute("INSERT INTO Users (Username, Password) VALUES (?,?)",
                 (
                     self.username,
                     self.password,
-                    self.email,
-                    self.date
                 ))
         conn.commit()
         conn.close()
@@ -44,8 +38,16 @@ def validate_signup(username_entry, password_entry):
     userid = username_entry.get()
     password = password_entry.get()
     errors = []
+    conn = sqlite3.connect(getcwd()+"\\accounts.db")
+    cursor = conn.cursor()
+    cursor.execute('''SELECT * from Users WHERE Username=?;''',[userid,])
+    result = cursor.fetchall()
+    conn.commit()
+    conn.close()
     if userid == "":
         errors.append(["Username", "Username must not be blank"])
+    elif len(result) == 0:
+        errors.append(["Username", "Username already in use"])
     if password == "":
         errors.append(["Password", "Password must not be blank"])
     elif password.isnumeric():
@@ -70,6 +72,9 @@ def validate_signup(username_entry, password_entry):
         first += " Invalid"
         second = second.rstrip("\n")
         messagebox.showerror(first, second)
+    else:
+        User(userid, password)
+        messagebox.showinfo("Success", "User successfully created")
 
 def show(password_entry, show_button, hide_button):
     password_entry.config(show='')
@@ -77,7 +82,7 @@ def show(password_entry, show_button, hide_button):
     hide_button.grid(row=0,column=1)
 
 def hide(password_entry, show_button, hide_button):
-    password_entry.config(show='LOL')
+    password_entry.config(show='')
     hide_button.grid_forget()
     show_button.grid(row=0,column=1)
 

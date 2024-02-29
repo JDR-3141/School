@@ -20,19 +20,24 @@ class User():
                 ))
         conn.commit()
         conn.close()
-        #load_from_db()
-
-def save_to_database():
-    for user in User.users:
-        user.save()
-
-def load_from_database():
-    pass
 
 # Function to validate the login
 def validate_login(username_entry, password_entry):
     userid = username_entry.get()
     password = password_entry.get()
+    conn = sqlite3.connect(getcwd()+"\\accounts.db")
+    cursor = conn.cursor()
+    cursor.execute('''SELECT * from Users WHERE Username=?;''',[userid,])
+    result = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    if len(result) == 0:
+        messagebox.showerror("Error", "No such user")
+    elif result[0][1] == password:
+        messagebox.showinfo("Success", "Logged in as " + userid)
+    else:
+        messagebox.showerror("Error", "Incorrect password")
+
 
 def validate_signup(username_entry, password_entry):
     userid = username_entry.get()
@@ -46,10 +51,18 @@ def validate_signup(username_entry, password_entry):
     conn.close()
     if userid == "":
         errors.append(["Username", "Username must not be blank"])
-    elif len(result) == 0:
+    elif len(result) != 0:
         errors.append(["Username", "Username already in use"])
-    if password == "":
-        errors.append(["Password", "Password must not be blank"])
+    else:
+        res = False
+        for ele in userid:
+            if ele == " ":
+                res = True
+                break
+        if res:
+            errors.append(["Username", "Username cannot contain empty space"])
+    if len(password) < 5:
+        errors.append(["Password", "Password must have at least 5 characters"])
     elif password.isnumeric():
         errors.append(["Password", "Password must contain letters"])
     elif password.isalpha():
@@ -62,6 +75,7 @@ def validate_signup(username_entry, password_entry):
                 break
         if not res:
             errors.append(["Password", "Password must contain at least 1 uppercase letter"])
+    print(errors)
     if len(errors) != 0:
         first = ""
         second = ""
@@ -82,7 +96,7 @@ def show(password_entry, show_button, hide_button):
     hide_button.grid(row=0,column=1)
 
 def hide(password_entry, show_button, hide_button):
-    password_entry.config(show='')
+    password_entry.config(show='*')
     hide_button.grid_forget()
     show_button.grid(row=0,column=1)
 
@@ -140,5 +154,3 @@ parent.config(menu=menu)
 # Start the Tkinter event loop
 default_screen()
 parent.mainloop()
-
-

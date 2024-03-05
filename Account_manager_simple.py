@@ -3,6 +3,8 @@ from tkinter import messagebox
 import sqlite3
 from os import getcwd
 
+global logged_in
+logged_in = False
 
 class User():
     users = []
@@ -35,6 +37,7 @@ def validate_login(username_entry, password_entry):
         messagebox.showerror("Error", "No such user")
     elif result[0][1] == password:
         messagebox.showinfo("Success", "Logged in as " + userid)
+        logged_in = True
     else:
         messagebox.showerror("Error", "Incorrect password")
 
@@ -137,6 +140,16 @@ def default_screen():
     signin_button = tk.Button(frame2, text="Sign up", command=lambda: validate_signup(username_entry, password_entry))
     signin_button.grid(row=0,column=0,padx=(5, 5))
 
+def view_details():
+    if not logged_on:
+        messagebox.showerror("Error", "No user logged in")
+        return
+    
+def change_details():
+    if not logged_on:
+        messagebox.showerror("Error", "No user logged in")
+        return
+
 # Create the main window
 parent = tk.Tk()
 parent.title("Login Form")
@@ -146,8 +159,8 @@ parent.geometry("200x115")
 
 menu = tk.Menu(parent)
 item = tk.Menu(menu)
-item.add_command(label="View details")#, command=lambda: return)
-item.add_command(label="Change details")#, command=lambda: return)
+item.add_command(label="View details", command=lambda: view_details)
+item.add_command(label="Change details", command=lambda: change_details)
 menu.add_cascade(label="Options", menu = item)
 parent.config(menu=menu)
 

@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import sqlite3
 from os import getcwd
+from datetime import date
 
 global logged_in
 logged_in = False
@@ -11,14 +12,20 @@ class User():
     def __init__(self, username, password):
         self.username = username
         self.password = password
+        self.date = date.today()#
+        self.email = ""
+        self.nationality = ""
+        self.age = 0
+        self.gender = ""
         User.users.append(self)
         #create database connection
         conn = sqlite3.connect(getcwd()+"\\accounts.db")
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO Users (Username, Password) VALUES (?,?)",
+        cursor.execute("INSERT INTO Users (Username, Password, Date) VALUES (?,?,?)",
                 (
                     self.username,
                     self.password,
+                    self.date
                 ))
         conn.commit()
         conn.close()
@@ -30,14 +37,18 @@ def validate_login(username_entry, password_entry):
     conn = sqlite3.connect(getcwd()+"\\accounts.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * from Users WHERE Username=?;''',[userid,])
+    names = list(map(lambda x: x[0], cursor.description))
     result = cursor.fetchall()
     conn.commit()
     conn.close()
+    print(result)
+    print(names)
     if len(result) == 0:
         messagebox.showerror("Error", "No such user")
     elif result[0][1] == password:
         messagebox.showinfo("Success", "Logged in as " + userid)
-        logged_in = True
+        global logged_in
+        logged_in = userid
     else:
         messagebox.showerror("Error", "Incorrect password")
 
@@ -141,26 +152,73 @@ def default_screen():
     signin_button.grid(row=0,column=0,padx=(5, 5))
 
 def view_details():
-    if not logged_on:
+    if not logged_in:
         messagebox.showerror("Error", "No user logged in")
-        return
+    else:
+        for widget in parent.winfo_children():
+            if type(widget) != tk.Menu:
+                widget.destroy()
+        conn = sqlite3.connect(getcwd()+"\\accounts.db")
+        cursor = conn.cursor()
+        cursor.execute('''SELECT * from Users WHERE Username=?;''',[logged_in,])
+        names = list(map(lambda x: x[0], cursor.description))
+        result = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        message = ""
+        for i in range(len(result[0])):
+            message += names[i] + ": "
+            if result[0][i] != None:
+                message += result[0][i] + "\n"
+            else:
+                message += "Not added\n"
+        message = message.rstrip("\n")
+        username_label = tk.Label(parent, text=message)
+        username_label.pack()
+
+    
+    
     
 def change_details():
-    if not logged_on:
+    if not logged_in:
         messagebox.showerror("Error", "No user logged in")
-        return
+    else:
+        for widget in parent.winfo_children():
+            if type(widget) != tk.Menu:
+                widget.destroy()
+        conn = sqlite3.connect(getcwd()+"\\accounts.db")
+        cursor = conn.cursor()
+        cursor.execute('''SELECT * from Users WHERE Username=?;''',[logged_in,])
+        names = list(map(lambda x: x[0], cursor.description))
+        results = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        result = [i+1 for i in range(len(names))]
+        yscrollbar = tk.Scrollbar(parent)
+        yscrollbar.pack(side = tk.RIGHT, fill = tk.Y)
+        files = tk.Listbox(parent, selectmode = "single",yscrollcommand = yscrollbar.set)
+        files.pack(padx = 10, pady = 10, expand = tk.YES, fill = "both")
+        for item in range(len(result)):
+            files.insert(tk.END, names[item])
+        yscrollbar.config(command = files.yview)
+        button = tk.Button(parent, text = "Change", command = lambda:change(files)) 
+        button.pack(fill = "x", side = "bottom")
+
+def change(files):
+    print(files.curselection()[0])
+
 
 # Create the main window
 parent = tk.Tk()
 parent.title("Login Form")
 
 # dimensions of the main window
-parent.geometry("200x115")
+parent.geometry("200x230")
 
 menu = tk.Menu(parent)
 item = tk.Menu(menu)
-item.add_command(label="View details", command=lambda: view_details)
-item.add_command(label="Change details", command=lambda: change_details)
+item.add_command(label="View details", command=lambda: view_details())
+item.add_command(label="Change details", command=lambda: change_details())
 menu.add_cascade(label="Options", menu = item)
 parent.config(menu=menu)
 

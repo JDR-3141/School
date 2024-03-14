@@ -1,0 +1,153 @@
+import tkinter as tk
+from tkinter import messagebox, simpledialog
+from PIL import Image, ImageTk
+import requests
+from io import BytesIO
+import sqlite3
+
+class Database:
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
+        self.create_table()
+
+    def create_table(self):
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                                id INTEGER PRIMARY KEY,
+                                username TEXT NOT NULL UNIQUE,
+                                password TEXT NOT NULL)''')
+        self.conn.commit()
+
+    def insert_user(self, username, password):
+        try:
+            self.cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+            self.conn.commit()
+            return True
+        except sqlite3.IntegrityError:
+            return False  # Username already exists
+
+    def get_user(self, username):
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+        return self.cursor.fetchone()
+
+    def update_password(self, username, new_password):
+        self.cursor.execute("UPDATE users SET password=? WHERE username=?", (new_password, username))
+        self.conn.commit()
+
+    def close(self):
+        self.conn.close()
+
+class AccountManager:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Account Manager")
+        
+        self.logged_in = False
+        self.username = ""
+        self.password = ""
+        
+        self.db = Database("users.db")  # Initialize the database
+        
+        # Download the cat GIF from the URL
+        response = requests.get("https://media.tenor.com/9yfK713DSLIAAAAj/cat-cats.gif",verify=False)
+        self.cat_image = Image.open(BytesIO(response.content))
+        
+        # Extract frames from the GIF
+        self.frames = []
+        try:
+            while True:
+                self.frames.append(self.cat_image.copy())
+                self.cat_image.seek(len(self.frames))
+        except EOFError:
+            pass
+        
+        self.current_frame_index = 0
+        self.create_widgets()
+        self.animate()
+        
+    def create_widgets(self):
+        # Create a canvas widget to display the GIF
+        self.canvas = tk.Canvas(self.master, width=self.cat_image.width, height=self.cat_image.height)
+        self.canvas.pack()
+        
+        # Create other widgets on top of the canvas
+        self.label_username = tk.Label(self.master, text="Username:")
+        self.label_username.pack()
+        self.entry_username = tk.Entry(self.master)
+        self.entry_username.pack()
+        
+        self.label_password = tk.Label(self.master, text="Password:")
+        self.label_password.pack()
+        self.entry_password = tk.Entry(self.master, show="*")
+        self.entry_password.pack()
+        
+        self.button_login = tk.Button(self.master, text="Login", command=self.login)
+        self.button_login.pack()
+        
+        self.button_signup = tk.Button(self.master, text="Sign Up", command=self.signup)
+        self.button_signup.pack()
+        
+        self.button_view_details = tk.Button(self.master, text="View Details", command=self.view_details, state=tk.DISABLED)
+        self.button_view_details.pack()
+        
+        self.button_change_details = tk.Button(self.master, text="Change Details", command=self.change_details, state=tk.DISABLED)
+        self.button_change_details.pack()
+        
+    def animate(self):
+        # Display the current frame
+        self.photo = ImageTk.PhotoImage(self.frames[self.current_frame_index])
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.photo, tags="cat")
+        
+        # Move to the next frame
+        self.current_frame_index += 1
+        if self.current_frame_index >= len(self.frames):
+            self.current_frame_index = 0
+        
+        # Schedule the next animation frame
+        self.master.after(100, self.animate)
+        
+    def login(self):
+        username = self.entry_username.get()
+        password = self.entry_password.get()
+        
+        user = self.db.get_user(username)
+        if user and user[2] == password:  # Check if user exists and password matches
+            self.logged_in = True
+            self.username = username
+            self.password = password
+            self.button_view_details.config(state=tk.NORMAL)
+            self.button_change_details.config(state=tk.NORMAL)
+            messagebox.showinfo("Login", "Logged in successfully!")
+        else:
+            messagebox.showerror("Login Failed", "Invalid username or password.")
+        
+    def signup(self):
+        username = self.entry_username.get()
+        password = self.entry_password.get()
+        
+        if self.db.insert_user(username, password):
+            messagebox.showinfo("Sign Up", "Sign up successful!")
+        else:
+            messagebox.showerror("Sign Up Failed", "Username already exists.")
+        
+    def view_details(self):
+        messagebox.showinfo("Account Details", f"Username: {self.username}\nPassword: {self.password}")
+        
+    def change_details(self):
+        new_password = simpledialog.askstring("Change Password", "Enter new password:", show='*')
+        if new_password:
+            self.db.update_password(self.username, new_password)
+            messagebox.showinfo("Change Password", "Password changed successfully.")
+        else:
+            messagebox.showinfo("Change Password", "Password change cancelled.")
+
+    def __del__(self):
+        self.db.close()  # Close the database connection when the object is deleted
+
+def main():
+    root = tk.Tk()
+    app = AccountManager(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()

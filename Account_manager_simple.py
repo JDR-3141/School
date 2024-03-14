@@ -237,6 +237,7 @@ parent.title("Login Form")
 
 # dimensions of the main window
 parent.geometry("200x230")
+parent.iconbitmap(getcwd()+"\\accounts.db")
 
 menu = tk.Menu(parent)
 item = tk.Menu(menu)

@@ -207,6 +207,8 @@ def change_details():
 def change(files, names, results):
     name = names[files.curselection()[0]]
     result = results[0][files.curselection()[0]]
+    if result == None:
+        result = "Not added"
     for widget in parent.winfo_children():
         if type(widget) != tk.Menu:
             widget.destroy()
@@ -229,7 +231,15 @@ def change(files, names, results):
     signin_button.grid(row=0,column=0,padx=(5, 5))
 
 def execute_change(name, new):
-    print("change " + name + " to " + new)
+    if not logged_in:
+        messagebox.showerror("Error", "No user logged in")
+    else:
+        conn = sqlite3.connect(getcwd() + "\\accounts.db")
+        cursor = conn.cursor()
+        cursor.execute(f'''UPDATE Users SET {name} = ? WHERE Username = ?;''', (new, logged_in))
+        conn.commit()
+        conn.close()
+        messagebox.showinfo("Success", f"{name} updated successfully")
 
 # Create the main window
 parent = tk.Tk()

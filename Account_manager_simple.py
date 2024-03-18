@@ -3,6 +3,7 @@ from tkinter import messagebox
 import sqlite3
 from os import getcwd
 from datetime import date
+from ttkthemes import ThemedTk, THEMES
 
 global logged_in
 logged_in = False
@@ -237,7 +238,9 @@ parent.title("Login Form")
 
 # dimensions of the main window
 parent.geometry("200x230")
-parent.iconbitmap(getcwd()+"\\accounts.db")
+parent.iconbitmap(getcwd()+"\\Icon.ico")
+
+#ThemedTk.set_theme(parent, "equilux")
 
 menu = tk.Menu(parent)
 item = tk.Menu(menu)

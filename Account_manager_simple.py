@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 import sqlite3
 from os import getcwd
 from datetime import date
@@ -233,14 +233,12 @@ def execute_change(name, new):
     print("change " + name + " to " + new)
 
 # Create the main window
-parent = tk.Tk()
+parent = ThemedTk(theme="Black")
 parent.title("Login Form")
 
 # dimensions of the main window
 parent.geometry("200x230")
 parent.iconbitmap(getcwd()+"\\Icon.ico")
-
-#ThemedTk.set_theme(parent, "equilux")
 
 menu = tk.Menu(parent)
 item = tk.Menu(menu)

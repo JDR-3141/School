@@ -18,10 +18,19 @@ class Square:
     def unglow(self):
         canvas.itemconfig(self.image, fill = self.colour)
 
+
+def populate_background(canvas):
+    for line in range(0,480,int(480/24)):
+        canvas.create_line(0,line,480,line,fill="grey")
+        canvas.create_line(line,0,line,480,fill="grey")
+
+
 window = tk.Tk()
-window.title("Chess")
+window.title("Test")
 window.geometry("480x480")
 window.maxsize(480, 480)
 window.minsize(480,480)
-global canvas
 canvas = tk.Canvas(window, width=480, height=480)
+canvas.pack()
+populate_background(canvas)
+window.mainloop()

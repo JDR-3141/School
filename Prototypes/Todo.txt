@@ -1,18 +1,9 @@
-
-​
-A Brown
-​
-FFT with Scipy
-Recording with sounddevice
 Playback with sounddevice
 File system GUI
 File system backend (online?)
 Notes GUI
-Manual PDF creation
 Drag and drop GUI
-Find notes from frequency
 Notes class structure
-LilyPond (automatic transcription)
 Login front end
 Login back end - database/online
 Hash password - find library

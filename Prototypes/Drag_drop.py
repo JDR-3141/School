@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter.constants import *
 import tkinter_dndr as dndr
 
 window = tk.Tk()

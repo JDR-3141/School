@@ -1,6 +1,5 @@
 File system GUI
 File system backend (online?)
-Notes GUI
 Drag and drop GUI
 Notes class structure
 Login front end

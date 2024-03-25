@@ -15,6 +15,6 @@ def find_closest_note(pitch):
   return closest_note
 
 note = "440"
-while note != " ":
+while note != "":
   note = int(input("Frequency: "))
   print(find_closest_note(note))

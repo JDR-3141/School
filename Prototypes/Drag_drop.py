@@ -11,3 +11,5 @@ canvas.place(x=20,y=100,width=440, height=20)
 instance = dndr.DragDropResizeWidget(canvas)
 instance.make_draggable_and_resizable()
 window.mainloop()
+
+# Learnt to use tkinter_dndr package, probably won't be easily applicable

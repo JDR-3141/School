@@ -14,7 +14,7 @@ def choose(choices):
     for item in range(len(result)):
         files.insert(tk.END, choices[item])
     yscrollbar.config(command = files.yview)
-    button = tk.Button(window, text = "Open")#, command = lambda:display_order(files.curselection()[0]))
+    button = tk.Button(window, text = "Open", command = lambda:choose(projects[1][files.curselection()[0]]))
     button.pack(fill = "x", side = "bottom")
 
 window = tk.Tk()

@@ -16,7 +16,7 @@ x = np.linspace(0.0, N * T, N, endpoint=False)
 y = myrecording
 yf = fft(y)  # Compute the FFT
 xf = fftfreq(N, T)[:N // 2]  # Frequency axis
-plt.plot(xf/42, 2.0 / N * np.abs(yf[0:N // 2]))  # Plot the magnitude
+plt.plot(xf, 2.0 / N * np.abs(yf[0:N // 2]))  # Plot the magnitude
 plt.grid()
 plt.show()
 

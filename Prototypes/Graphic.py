@@ -20,8 +20,8 @@ def populate_background(canvas):
 #140, 140, 140
 def add_note(canvas, start, end, pitch):
     note_ref={"c":0,"d":20,"e":40,"f":60,"g":80,"a":100,"b":120}
-    octave_ref={"2":0,"3":160,"4":320,"5":420}
-    canvas.create_rectangle(start*20+40, 480-note_ref[pitch[0]]-octave_ref[pitch[1]], end*20+60, 480-note_ref[pitch[0]]-octave_ref[pitch[1]]-20, fill="grey")
+    octave_ref={"2":0,"3":140,"4":280,"5":420}
+    canvas.create_rectangle(start*20+20, 480-note_ref[pitch[0]]-octave_ref[pitch[1]], end*20+40, 480-note_ref[pitch[0]]-octave_ref[pitch[1]]-20, fill="grey")
 
 
 
@@ -35,4 +35,12 @@ canvas.pack()
 populate_background(canvas)
 for note in [[1,1,"e4"],[10,12,"c2"],[4,15,"c5"]]:
     add_note(canvas,*note)
+note = "e4"
+start = 1
+end = 1
+while note != "" and start != "" and end != "":
+    note = input("Note: ")
+    start = int(input("Start: "))
+    end = int(input("End: "))
+    add_note(canvas,start,end,note)
 window.mainloop()

@@ -1,8 +1,4 @@
-File system GUI
-File system backend (online?)
-Drag and drop GUI
 Notes class structure
-Login front end
 Login back end - database/online
 Save to file
 Load from file

@@ -1,0 +1,5 @@
+Problems:
+Manual transcription is tedious - During composition many ideas can be lost by the time they've been written down, as inexperienced composers may not be able to keep ideas in their head while transcribing.
+Automatic transcription is multi-step - There are no clear tools out there which specifically cater to the speed of composition - recording and transcription are done separately
+Multiple takes - Transcribing can be too long a process to enable multiple takes to be done one after the other
+Some musicians are not formally trained - Composition can be inaccessible to those who cannot write music, especially when writing for a group

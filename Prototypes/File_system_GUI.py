@@ -25,6 +25,3 @@ window.minsize(480,480)
 
 choose(projects[0])
 window.mainloop()
-
-
-

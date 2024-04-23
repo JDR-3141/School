@@ -36,4 +36,5 @@ Note.time = 8
 Note(1,4,"c4")
 Note(4,4,"f5")
 Note(4,4,"e7")
-for notes in Note.notes()
+for note in Note.notes():
+    print(note)

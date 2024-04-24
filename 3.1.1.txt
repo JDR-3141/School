@@ -1,0 +1,16 @@
+Problems:
+Manual transcription is tedious - During composition many ideas can be lost by the time they've been written down, as inexperienced composers may not be able to keep ideas in their head while transcribing.
+Automatic transcription is multi-step - There are no clear tools out there which specifically cater to the speed of composition - recording and transcription are done separately
+Multiple takes - Transcribing can be too long a process to enable multiple takes to be done one after the other
+Some musicians are not formally trained - Composition can be inaccessible to those who cannot write music, especially when writing for a group
+Musical education - Learning to read sheet music can be boring when you have to learn pieces that you don't want to
+Automatic transcription is only easy on electronic instruments - People who only play an acoustic instrument may feel pressured to learn keyboard to transcribe their pieces, this is inefficient
+Cultural heritage - Cultural music can often be lost as their is no one to pass the music down aurally or to transcribe it
+
+
+Computing solutions:
+Interfacing - Lilypond is a program which can turn a specific text format into PDF sheet music. My Python code can communicate with Lilypond via the modules subprocess and lilypond.
+OOP - The similar qualities that all music notes share make them easily applicable to being objects, having parameters like pitch and duration
+Database - The one to many relationship of Users to Pieces and Pieces to Takes means that a relational database can be easily employed to hold the data files
+Signal processing - Mathematical manipulation of data to extract musical features is a powerful tool to recognise music in audio
+GUI - Being able to visualise and edit music in an intuitive way is solvable by a good GUI

@@ -16,7 +16,7 @@ for t in result:
         piece_number = t[0]
         found = True
 if not found:
-    print("User not found")
+    print("Piece not found")
 else:
     conn = sqlite3.connect("C:\\Users\\jdraj\\OneDrive\\Documents\\GitHub\\School\\Prototypes\\Files.db")
     cursor = conn.cursor()
@@ -26,3 +26,4 @@ else:
     conn.commit()
     conn.close()
 print(names1, "\n", result1)
+

@@ -11,6 +11,7 @@ class Note:
 
     def __str__(self):
         string = self.pitch
+        return string
 
     def get_start(self):
         return self.start
@@ -36,4 +37,5 @@ Note.time = 8
 Note(1,4,"c4")
 Note(4,4,"f5")
 Note(4,4,"e7")
-for notes in Note.notes()
+for note in Note.notes:
+    print(note)

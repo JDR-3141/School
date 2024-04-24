@@ -21,7 +21,8 @@ def populate_background(canvas):
 def add_note(canvas, start, end, pitch):
     note_ref={"c":0,"d":20,"e":40,"f":60,"g":80,"a":100,"b":120}
     octave_ref={"2":0,"3":140,"4":280,"5":420}
-    canvas.create_rectangle(start*20+20, 480-note_ref[pitch[0]]-octave_ref[pitch[1]], end*20+40, 480-note_ref[pitch[0]]-octave_ref[pitch[1]]-20, fill="grey")
+    canvas.create_rectangle(start*20+20, 480-note_ref[pitch[0]]-octave_ref[pitch[1]]\
+            , end*20+40, 480-note_ref[pitch[0]]-octave_ref[pitch[1]]-20, fill="grey")
 
 
 

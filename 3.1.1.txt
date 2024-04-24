@@ -11,4 +11,6 @@ Cultural heritage - Cultural music can often be lost as their is no one to pass 
 Computing solutions:
 Interfacing - Lilypond is a program which can turn a specific text format into PDF sheet music. My Python code can communicate with Lilypond via the modules subprocess and lilypond.
 OOP - The similar qualities that all music notes share make them easily applicable to being objects, having parameters like pitch and duration
-Database
+Database - The one to many relationship of Users to Pieces and Pieces to Takes means that a relational database can be easily employed to hold the data files
+Signal processing - Mathematical manipulation of data to extract musical features is a powerful tool to recognise music in audio
+GUI - Being able to visualise and edit music in an intuitive way is solvable by a good GUI

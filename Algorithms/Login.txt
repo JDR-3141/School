@@ -1,0 +1,21 @@
+OUTPUT login_GUI
+
+INPUT username
+INPUT password
+
+CONNECT database
+found = REQUEST all FROM user_table WHERE username_db == username
+DISCONNECT database
+IF LENGTH FOUND == 1 THEN
+	IF password_db == password THEN
+		OUTPUT success_message
+		logged_in = username
+		OUTPUT recording_GUI
+	ELSE
+		OUTPUT wrong_password
+		REPEAT
+ELSE
+	OUTPUT wrong_username
+	REPEAT
+
+

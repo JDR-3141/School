@@ -1,10 +1,17 @@
 FUNCTION Lilypond_text (list_of_note_objects, key_sig, time_sig) {
 
 text = "{\n"
+text += "\\clef treble\n"
+text += "\\time "
+text += time_sig
+text += "\n\\key "
+text += key_sig
+text += "\n"
 FOR note in list_of_note_objects:
 	text += note.pitch
-	text += reference [note.octave]
+	text += octave_reference [note.octave]
 	text += note.length
 	text += " "
 text += "}"
 
+RETURN text}

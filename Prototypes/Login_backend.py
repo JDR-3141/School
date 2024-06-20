@@ -1,36 +1,28 @@
 import sqlite3
 from os import getcwd
-from datetime import date
-
 
 class User():
     users = []
-    def __init__(self, username, password):
+    def __init__(self, userID, username, password):
+        self.userID = userID
         self.username = username
         self.password = password
-        self.date = date.today()#
-        self.email = ""
-        self.nationality = ""
-        self.age = 0
-        self.gender = ""
         User.users.append(self)
         #create database connection
-        conn = sqlite3.connect(getcwd()+"\\accounts.db")
+        conn = sqlite3.connect(getcwd()+"\\Prototypes\\Files.db")
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO Users (Username, Password, Date) VALUES (?,?,?)",
+        cursor.execute("INSERT INTO Users (UserID, Username, Password) VALUES (?,?,?)",
                 (
+                    self.userID,
                     self.username,
                     self.password,
-                    self.date
                 ))
         conn.commit()
         conn.close()
 
 # Function to validate the login
-def validate_login(username_entry, password_entry):
-    userid = username_entry.get()
-    password = password_entry.get()
-    conn = sqlite3.connect(getcwd()+"\\accounts.db")
+def validate_login(userid, password):
+    conn = sqlite3.connect(getcwd()+"\\Prototypes\\Files.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * from Users WHERE Username=?;''',[userid,])
     names = list(map(lambda x: x[0], cursor.description))
@@ -41,7 +33,7 @@ def validate_login(username_entry, password_entry):
     print(names)
     if len(result) == 0:
         print("No such user")
-    elif result[0][1] == password:
+    elif result[0][2] == password:
         print("Logged in as " + userid)
         global logged_in
         logged_in = userid
@@ -49,16 +41,19 @@ def validate_login(username_entry, password_entry):
         print("Incorrect password")
 
 
-def validate_signup(username_entry, password_entry):
-    userid = username_entry.get()
-    password = password_entry.get()
+def validate_signup(userid, password):
     errors = []
-    conn = sqlite3.connect(getcwd()+"\\accounts.db")
+    conn = sqlite3.connect(getcwd()+"\\Prototypes\\Files.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * from Users WHERE Username=?;''',[userid,])
     result = cursor.fetchall()
+    cursor.execute('''SELECT UserID from Users''')
+    users = cursor.fetchall()
     conn.commit()
     conn.close()
+    users.sort()
+    print(users)
+    ID = users[-1][0] + 1
     if userid == "":
         errors.append(["Username", "Username must not be blank"])
     elif len(result) != 0:
@@ -95,7 +90,18 @@ def validate_signup(username_entry, password_entry):
         first = first.rstrip(" & ")
         first += " Invalid"
         second = second.rstrip("\n")
-        messagebox.showerror(first, second)
+        print(first)
+        print(second)
     else:
-        User(userid, password)
-        messagebox.showinfo("Success", "User successfully created")
+        User(ID, userid, password)
+        print("User successfully created")
+
+choice = input("Sign up or login (1/2): ")
+if choice == "1":
+    username = input("Username: ")
+    password = input("Password: ")
+    validate_signup(username, password)
+elif choice == "2":
+    username = input("Username: ")
+    password = input("Password: ")
+    validate_login(username, password)

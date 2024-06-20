@@ -60,7 +60,7 @@ parent.title("Login Form")
 
 # dimensions of the main window
 parent.geometry("200x230")
-parent.iconbitmap(getcwd()+"\\Icon.ico")
+parent.iconbitmap(getcwd()+"\\Prototypes\\Icon.ico")
 
 menu = tk.Menu(parent)
 item = tk.Menu(menu)
@@ -71,3 +71,7 @@ parent.config(menu=menu)
 # Start the Tkinter event loop
 default_screen()
 parent.mainloop()
+
+
+
+

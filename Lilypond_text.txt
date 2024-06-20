@@ -1,0 +1,10 @@
+FUNCTION Lilypond_text (list_of_note_objects, key_sig, time_sig) {
+
+text = "{\n"
+FOR note in list_of_note_objects:
+	text += note.pitch
+	text += reference [note.octave]
+	text += note.length
+	text += " "
+text += "}"
+

@@ -6,7 +6,9 @@ INPUT password
 CONNECT database
 found = REQUEST all FROM user_table WHERE username_db == username
 DISCONNECT database
-IF LENGTH FOUND == 1 THEN
+
+IF login THEN {
+IF LENGTH found == 1 THEN
 	IF password_db == password THEN
 		OUTPUT success_message
 		logged_in = username
@@ -17,5 +19,18 @@ IF LENGTH FOUND == 1 THEN
 ELSE
 	OUTPUT wrong_username
 	REPEAT
+}
 
+IF signup THEN {
+IF LENGTH found == 1 THEN
+	OUTPUT user_already_exists
+IF #username fits all conditions# THEN
+	IF #password fits all conditions# THEN
+		CREATE User OBJECT (username, password)
+		OUTPUT success_message
+	ELSE
+		OUTPUT invalid_password
+ELSE
+	OUTPUT invalid_username
+}
 

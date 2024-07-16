@@ -1,0 +1,31 @@
+CLASS Notes:
+
+	#...#
+
+	PROCEDURE change_pitch (self, new):
+		self.pitch = new
+
+	PROCEDURE change_start (self, new):
+		self.start = new
+
+	PROCEDURE change_duration (self, new):
+		self.duration = new
+
+
+note_to_change = reference [position clicked]
+
+INPUT new_pitch
+INPUT new_start
+INPUT new_duration
+
+IF note_to_change == FALSE THEN
+	OUTPUT no_note_selected
+ELSE
+	IF new_pitch, new_start, new_duration == valid THEN
+		note_to_change.change_pitch(new_pitch)
+		note_to_change.change_start(new_start)
+		note_to_change.change_duration(new_duration)
+		PROCEDURE lilypond_text
+
+
+

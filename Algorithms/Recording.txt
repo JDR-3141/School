@@ -1,0 +1,14 @@
+sample_rate = 44100 (Hz)
+recording_duration = 10 (s)
+total_samples = sample_rate * recording_duration
+
+audio_file = [0] * total_samples
+
+FOR sample IN RANGE total_samples:
+	audio_file [sample] = #microphone amplitude#
+	WAIT 1/sample_rate
+
+OPEN output.wav
+WRITE audio_file TO output.wav
+CLOSE output.wav
+

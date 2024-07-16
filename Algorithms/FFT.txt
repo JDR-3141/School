@@ -1,0 +1,29 @@
+FUNCTION FFT (complex_vector) {
+
+N = LENGTH (complex_vector)
+
+IF N == 1:
+	RETURN complex_vector
+
+half_length = N / 2
+
+even = []
+odd = []
+FOR sample IN RANGE (0, LENGTH (complex_vector) - 1, 2):
+	even APPEND complex_vector [sample]
+	odd APPEND complex_vector [sample + 1]
+
+even_result = FFT (even)
+odd_result = FFT (odd)
+
+frequency_bins = [0] * N
+
+FOR bin IN RANGE (half_length):
+	complex_exponential = POLAR_TO_RECTANGULAR (1, -2*PI*bin/N) * odd_result [bin]
+	frequency_bins [bin] = even_result [bin] +  complex_exponential
+	frequency_bins [bin + half_length] = even_result[bin] - complex_exponential
+
+RETURN frequency_bins
+
+}
+

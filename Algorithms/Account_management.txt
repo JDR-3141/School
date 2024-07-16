@@ -1,0 +1,14 @@
+CLASS User:
+
+	#...#
+
+	PROCEDURE change_username (self, new):
+		self.username = new
+
+	PROCEDURE change_password (self, new):
+		self.password = new
+
+	PROCEDURE change_email (self, new):
+		self.email = new
+
+	PROCEDURE

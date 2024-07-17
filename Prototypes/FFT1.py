@@ -3,7 +3,7 @@ import numpy as np
 import sounddevice as sd # Learnt to use this module to record - possible use stream in future?
 
 samplerate = 44100  # Sample rate
-seconds = 10 # Duration of recording
+seconds = 3 # Duration of recording
 
 data = sd.rec(int(seconds * samplerate), samplerate=samplerate, channels=1)
 sd.wait()  # Wait until recording is finished

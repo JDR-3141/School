@@ -9,7 +9,10 @@ import customtkinter as ctk
 import sqlite3
 
 global parent
-
+global colour_palette
+colour_palette = {"bgteal": "#BEE9E8", "bgblue": "#CAE9FF", "fgteal": "#62B6CB", "fgblue": "#5FA8D3", "dark": "#1B4965"}
+global name
+name = "Cadenza"
 #########################################################################################################
 
 #########################################################################################################
@@ -19,16 +22,17 @@ class GUI(tk.Tk):
 
     def __init__(self):
         super().__init__()
-        self.geometry("1160x774")
+        self.geometry("580x388")
         #self.resizable(False, False)
-        self.title("Recording App")
+        self.title(name)
         self.configure(bg = "blue")
 
     def Label(self):
-        self.backGroundImage = tk.PhotoImage(file = getcwd()+"\\Images\\Background.png")
+        self.backGroundImage = tk.PhotoImage(file = getcwd()+"\\Images\\solid-color-image.png")
         self.backGroundImageLabel = tk.Label(self, image = self.backGroundImage)
         self.backGroundImageLabel.place(x = 0, y = 0, relwidth = 1, relheight = 1)
-
+        self.titleLabel = tk.Label(self, text = name, font = ("Arial", 30, "bold"), bg = colour_palette["bgblue"], fg = colour_palette["dark"])
+        self.titleLabel.place(relx = 0.5, y=30, anchor = tk.CENTER)
 
 class Take:
 
@@ -147,3 +151,4 @@ if __name__ == "__main__":
     gui = GUI()
     gui.Label()
     gui.mainloop()
+    gui.main.wm_attributes("-transparentcolor", 'blue')

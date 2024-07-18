@@ -15,6 +15,21 @@ global parent
 #########################################################################################################
 # Classes
 
+class GUI(tk.Tk):
+
+    def __init__(self):
+        super().__init__()
+        self.geometry("1160x774")
+        #self.resizable(False, False)
+        self.title("Recording App")
+        self.configure(bg = "blue")
+
+    def Label(self):
+        self.backGroundImage = tk.PhotoImage(file = getcwd()+"\\Images\\Background.png")
+        self.backGroundImageLabel = tk.Label(self, image = self.backGroundImage)
+        self.backGroundImageLabel.place(x = 0, y = 0, relwidth = 1, relheight = 1)
+
+
 class Take:
 
     def __init__(self, fs, seconds, user, song, take, audio_file):
@@ -31,12 +46,36 @@ class Take:
         write(self.file, self.fs, self.audio)
 
     def choose(self):
-        self.audio = choose_audio(self.user)
+        conn = sqlite3.connect(getcwd()+"\\Files.db")
+        cursor = conn.cursor()
+        cursor.execute('''SELECT Projectname FROM Songs WHERE Creator = ?''', (self.user,),)
+        result = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        choose(result)
+
+    def set_audio(self, new):
+        self.file = new
 
 #########################################################################################################
 
 #########################################################################################################
 # Functions
+
+def choose(choices):
+    for widget in parent.winfo_children():
+        if type(widget) != tk.Menu:
+            widget.destroy()
+    result = [i+1 for i in range(len(choices))]
+    yscrollbar = tk.Scrollbar(parent)
+    yscrollbar.pack(side = tk.RIGHT, fill = tk.Y)
+    files = tk.Listbox(parent, selectmode = "single",yscrollcommand = yscrollbar.set)
+    files.pack(padx = 10, pady = 10, expand = tk.YES, fill = "both")
+    for item in range(len(result)):
+        files.insert(tk.END, choices[item])
+    yscrollbar.config(command = files.yview)
+    button = tk.Button(parent, text = "Open", command = lambda:print(choices[files.curselection()[0]][0]))
+    button.pack(fill = "x", side = "bottom")
 
 def choose_audio(user):
     for widget in parent.winfo_children():
@@ -61,16 +100,16 @@ def default_screen():
         if type(widget) != tk.Menu:
             widget.destroy()
 
-    frame2 = ctk.CTkFrame(parent)
+    frame2 = tk.Frame(parent)
     frame2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     # Create and place the record button
-    record_button = ctk.CTkButton(frame2, text="Record", command=lambda: audio_input(True))
+    record_button = tk.Button(frame2, text="Record", command=lambda: audio_input(True))
     record_button.grid(row=0,column=1,padx=(5, 5))
 
 
     # Create and place the choose button
-    choose_button = ctk.CTkButton(frame2, text="Choose", command=lambda: audio_input(False))
+    choose_button = tk.Button(frame2, text="Choose", command=lambda: audio_input(False))
     choose_button.grid(row=0,column=0,padx=(5, 5))
 
 
@@ -82,24 +121,29 @@ def audio_input(recording):
         new_take.choose()
 
 
-ctk.set_appearance_mode("light")
-ctk.set_default_color_theme("blue")
-    # Create the main window
-parent = ctk.CTk()
-parent.title("Login Form")
+# ctk.set_appearance_mode("light")
+# ctk.set_default_color_theme("blue")
+    # Create the main parent
+# parent = tk.Tk()
+# parent.title("Login Form")
 
-# dimensions of the main window
-parent.geometry("400x500")
-parent.iconbitmap(getcwd()+"\\Icon.ico")
+# # dimensions of the main parent
+# parent.geometry("400x500")
+# parent.iconbitmap(getcwd()+"\\Icon.ico")
 
-menu = tk.Menu(parent)
-menu.configure()
-item = tk.Menu(menu)
-item.add_command(label="View details")
-item.add_command(label="Change details")
-menu.add_cascade(label="Options", menu = item)
-parent.config(menu=menu)
+# menu = tk.Menu(parent)
+# menu.configure()
+# item = tk.Menu(menu)
+# item.add_command(label="View details")
+# item.add_command(label="Change details")
+# menu.add_cascade(label="Options", menu = item)
+# parent.config(menu=menu)
 
-# Start the Tkinter event loop
-default_screen()
-parent.mainloop()
+# # Start the Tkinter event loop
+# default_screen()
+# parent.mainloop()
+
+if __name__ == "__main__":
+    gui = GUI()
+    gui.Label()
+    gui.mainloop()

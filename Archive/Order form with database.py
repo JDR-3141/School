@@ -4,6 +4,7 @@
 
 from tkinter import *
 import sqlite3
+from os import getcwd
 
 ##########################################################################################################
 
@@ -126,7 +127,7 @@ def name_order(e1, text):
     for widget in window.winfo_children():
         if type(widget) != Menu:
             widget.destroy()
-    conn = sqlite3.connect("U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\main.db")
+    conn = sqlite3.connect(getcwd()+"\\Archive\\main.db")
     cursor = conn.cursor()
     cursor.execute("INSERT INTO order_tbl (orderID, order_name) VALUES (?,?)",
                 (
@@ -146,7 +147,7 @@ def finish_order():
 
 def save_to_db(item):
     #create database connection
-    conn = sqlite3.connect("U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\main.db")
+    conn = sqlite3.connect(getcwd()+"\\Archive\\main.db")
     cursor = conn.cursor()
     cursor.execute("INSERT INTO item_tbl (orderID, item_name, item_quantity, item_price) VALUES (?,?,?,?)",
                    (
@@ -160,7 +161,14 @@ def save_to_db(item):
     load_from_db()
 
 def load_from_db():
-    conn = sqlite3.connect('U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\main.db')
+    # conn = sqlite3.connect(getcwd()+"\\Archive\\main.db")
+    # cursor = conn.cursor()
+    # cursor.execute('''SELECT * FROM sqlite_master;''')
+    # result = cursor.fetchall()
+    # conn.commit()
+    # conn.close()
+    # print(result)
+    conn = sqlite3.connect(getcwd()+"\\Archive\\main.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * from item_tbl''')
     result = cursor.fetchall()

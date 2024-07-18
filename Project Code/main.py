@@ -43,15 +43,18 @@ def choose_audio(user):
         if type(widget) != tk.Menu:
             widget.destroy()
 
-    conn = sqlite3.connect('U:\\My Documents\\A Level\\CS\\Mr Brown 02\\School\\Files.db')
+    conn = sqlite3.connect(getcwd()+"\\Files.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT Projectname FROM Songs WHERE Creator = ?''', (user,),)
     result = cursor.fetchall()
     conn.commit()
     conn.close()
 
-    combobox = ctk.CTkComboBox(parent, values=result)
+    combobox = ctk.CTkComboBox(parent, values=result, command=callback)
+    combobox.pack()
     
+def callback(choice):
+    print(choice)
 
 def default_screen():
     for widget in parent.winfo_children():
@@ -72,9 +75,11 @@ def default_screen():
 
 
 def audio_input(recording):
-    new_take = Take(44100, 3, "", "", 0, "test.wav")
+    new_take = Take(44100, 3, "Dev", "", 0, "test.wav")
     if recording:
         new_take.record()
+    else:
+        new_take.choose()
 
 
 ctk.set_appearance_mode("light")

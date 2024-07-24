@@ -33,6 +33,7 @@ class GUI(tk.Tk):
         item.add_command(label="Change details")#, command=lambda: change_details())
         menu.add_cascade(label="Options", menu = item)
         self.config(menu=menu)
+        print("CADENZA VERSION 0.07689")
 
 
     def Label(self):

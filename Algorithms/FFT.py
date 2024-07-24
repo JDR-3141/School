@@ -6,10 +6,12 @@ def FFT (complex_vector):
 
     N = len (complex_vector)
 
+    
+
     if N == 1:
         return complex_vector
 
-    half_length = N / 2
+    half_length = N // 2
 
     even = []
     odd = []
@@ -30,3 +32,17 @@ def FFT (complex_vector):
 
     return frequency_bins
 
+def change_format(frequency_bins, sample_frequency):
+    N = len(frequency_bins)
+    frequency_bins = frequency_bins[:N//2-1]
+    frequency_resolution = sample_frequency/N
+    for i in range(len(frequency_bins)):
+        frequency_bins[i] = [frequency_resolution*i, cmath.imag(frequency_bins[i]*2/N)]
+    
+    return frequency_bins
+
+
+
+frequency_bins = FFT([0.0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707])
+print(frequency_bins)
+print(change_format(list(frequency_bins[0]), 8))

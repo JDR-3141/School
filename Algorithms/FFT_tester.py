@@ -11,7 +11,7 @@ num_samples = [int(freq * duration) for freq in sampling_frequencies]
 test_inputs = []
 for freq, samples in zip(sampling_frequencies, num_samples):
     time_values = np.linspace(0, duration, samples)
-    sine_wave = np.sin(2 * np.pi * 1 * time_values)  # 1 Hz sine wave
+    sine_wave = np.sin(2 * np.pi * 3 * time_values)  # 1 Hz sine wave
     test_inputs.append(sine_wave.tolist())
 
 print(test_inputs)

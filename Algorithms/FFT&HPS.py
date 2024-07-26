@@ -41,18 +41,21 @@ def FFT (complex_vector):
 
     return frequency_bins
 
-# def HPS(frequency_bins):
-#     for i in range(HPS_number)
+def HPS(fft_output):
+    interpolated_output = np.interp(np.arange(0, len(fft_output), 1/HPS_number), np.arange(0, len(fft_output)), fft_output)
+    print(interpolated_output)
+    return interpolated_output
+    ################################################################################### WORK HERE NEXT!!!! 
 
 def change_format(frequency_bins, sample_frequency):
     N = frequency_bins.size
     frequency_bins = frequency_bins[:N//2]
     frequency_resolution = sample_frequency/N
-    frequency_bins_list = [0] * (N//2)
-    for i in range(N//2):
-        frequency_bins_list[i]  = [frequency_resolution*i, round(abs(frequency_bins[i])*2/N, 3)]
-    
-    return frequency_bins_list
+    frequency_bins_list = [frequency_resolution*i for i in range(N//2)]
+    f = lambda x: round(abs(x)*2/N, 3)
+    vf = np.vectorize(f)
+    frequency_bins_magnitude  = vf(frequency_bins)
+    return frequency_bins_list, frequency_bins_magnitude # outputs a list of frequencies and a numpy array of magnitudes
 
 
 def next_power_of_two(x):
@@ -74,8 +77,9 @@ def STFT(data, window_size, hop_size, sample_frequency):
         segment = data[start:start + window_size]
         windowed_segment = np.multiply(segment, window)
         frequency_bins = FFT(windowed_segment)
-        formatted_bins = change_format(frequency_bins, sample_frequency)
-        stft_result.append(list(formatted_bins))
+        formatted_bins, magnitudes = change_format(frequency_bins, sample_frequency)
+        magnitudes = HPS(magnitudes)
+        stft_result.append([formatted_bins, list(magnitudes)])
     return stft_result
 
 samplerate, data = wavfile.read('test_audio.wav')

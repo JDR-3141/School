@@ -12,7 +12,6 @@ def FFT (complex_vector):
     complex_vector = pad_to_power_of_two(complex_vector)
     N = complex_vector.size
 
-    
 
     if N == 1:
         return complex_vector
@@ -109,6 +108,7 @@ def HPS(fft_output, sample_frequency, window_size):
         max_bin = quadratic_interpolation(hps_spectrum, max_bin)
     max_frequency = max_bin * frequency_resolution
     
+    max_frequency = max_frequency if max_frequency > 62 else 0
     return max_frequency
 
 
@@ -151,10 +151,18 @@ def STFT(data, window_size, hop_size, sample_frequency):
 # samplerate, data1 = wavfile.read('test_audio1.wav')
 # result_lt = np.concatenate((data, data1))
 # wavfile.write('test_audio2.wav', samplerate, result_lt)
-samplerate, result_lt = wavfile.read('record_out.wav')
+samplerate, result_lt = wavfile.read('test.wav')
 #result_lt = result_lt / np.max(np.abs(result_lt))
-frequency_bins = STFT(result_lt, 1024, 512, samplerate)
-print(frequency_bins)
+frequency_bins = np.array(STFT(result_lt, 1024, 512, samplerate))
+x = np.arange(frequency_bins.size)
+
+plt.scatter(x, frequency_bins)
+
+plt.yscale('log')
+
+plt.ylim(10, 4500)
+
+plt.show()
 # plt.figure(figsize=(10, 6))
 # for i, frame in enumerate(frequency_bins):
 #     plt.plot([f[0] for f in frame], [f[1] for f in frame], label=f'Frame {i}')

@@ -1,11 +1,17 @@
 import tkinter as tk
 from os import getcwd
 
+import sys
+
+sys.path.append(getcwd()+"\\Project Code")
+
+from classes.Takes import Take
+
 
 
 class GUI(tk.Tk):
 
-    GUI.colour_palette = {"bgteal": "#BEE9E8", "bgblue": "#CAE9FF", "fgteal": "#62B6CB", "fgblue": "#5FA8D3", "dark": "#1B4965"}
+    colour_palette = {"bgteal": "#BEE9E8", "bgblue": "#CAE9FF", "fgteal": "#62B6CB", "fgblue": "#5FA8D3", "dark": "#1B4965"}
     name = "Cadenza"
 
     def __init__(self, audio_input):
@@ -33,7 +39,7 @@ class GUI(tk.Tk):
         self.titleLabel.place(relx = 0.5, y=30, anchor = tk.CENTER)
 
     def Button(self, parent, text, command):
-        button = tk.Button(parent, text = text, background= GUI.colour_palette["fgblue"], foreground = GUI.colour_palette["dark"], activebackground=colour_palette["fgteal"], activeforeground=colour_palette["dark"], font = ("Arial", 15, "bold")) 
+        button = tk.Button(parent, text = text, background= GUI.colour_palette["fgblue"], foreground = GUI.colour_palette["dark"], activebackground = GUI.colour_palette["fgteal"], activeforeground = GUI.colour_palette["dark"], font = ("Arial", 15, "bold")) 
         if command:
             button.configure(command=command)
         return button
@@ -51,12 +57,12 @@ class GUI(tk.Tk):
         frame2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         # Create and place the record button
-        record_button = self.Button(frame2,"Record", lambda: self.audio_input(True, self))
+        record_button = self.Button(frame2,"Record", lambda: self.audio_input(True, self, Take))
         record_button.grid(row=0,column=1,padx=(5, 5))
 
 
         # Create and place the choose button
-        choose_button = self.Button(frame2,"Choose",lambda: self.audio_input(False, self))
+        choose_button = self.Button(frame2,"Choose",lambda: self.audio_input(False, self, Take))
         choose_button.grid(row=0,column=0,padx=(5, 5))
 
     def choose(self, choices):
@@ -71,5 +77,8 @@ class GUI(tk.Tk):
         for item in range(len(result)):
             files.insert(tk.END, choices[item])
         yscrollbar.config(command = files.yview)
-        button = tk.Button(self, text = "Open", command = lambda:print(choices[files.curselection()[0]][0]))
+        button = tk.Button(self, text = "Open", command = lambda:self.take.get_notes())
         button.pack(fill = "x", side = "bottom")
+
+    def add_take(self, take):
+        self.take = take

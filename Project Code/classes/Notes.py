@@ -2,15 +2,14 @@ class Note:
     notes = []
     time = 0
 
-    def __init__(self, start, end, pitch):
+    def __init__(self, start,pitch):
         self.start = start
-        self.end = end
-        self.duration = end - start
         self.pitch = pitch
-        Note.notes.append(self)
+        if self.start != None:
+            Note.notes.append(self)
 
     def __str__(self):
-        string = self.pitch
+        string = str(self.pitch)
         return string
 
     def get_start(self):
@@ -25,7 +24,8 @@ class Note:
     
     def set_end(self, new):
         self.end = new
-        self.duration = self.end - self.start
+        if self.start != None:
+            self.duration = self.end - self.start
 
     def get_pitch(self):
         return self.pitch

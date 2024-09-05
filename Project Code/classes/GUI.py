@@ -77,7 +77,7 @@ class GUI(tk.Tk):
         for item in range(len(result)):
             files.insert(tk.END, choices[item])
         yscrollbar.config(command = files.yview)
-        button = tk.Button(self, text = "Open", command = lambda:self.take.get_notes())
+        button = tk.Button(self, text = "Open", command = lambda:self.take.get_notes(files.curselection()[0]))
         button.pack(fill = "x", side = "bottom")
 
     def add_take(self, take):

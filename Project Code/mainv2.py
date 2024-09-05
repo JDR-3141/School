@@ -1,9 +1,9 @@
 #########################################################################################################
 # Imports and globals
 
-from tkinter import messagebox
-from classes import *
-from modules import *
+#from tkinter import messagebox
+from classes.GUI import GUI
+from modules.recording import audio_input
 
 #########################################################################################################
 

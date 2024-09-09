@@ -157,7 +157,7 @@ def pad_to_power_of_two(complex_vector):
 
 # def apply_window(segment, window):
 #     return [s * w for s, w in zip(segment, window)]
-7
+
 
 def STFT(data, window_size, hop_size, sample_frequency):
     window = np.hanning(window_size)

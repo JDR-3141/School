@@ -7,3 +7,4 @@ def audio_input(recording, gui, stft):
         new_take.record()
     else:
         new_take.choose()
+    new_take.get_notes()

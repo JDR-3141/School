@@ -14,15 +14,17 @@ def convert(take):
         add = ""
         text += note.get_pitch()
         n  = note.get_duration()
-        if (current_time + n)//in_a_bar > current_bar:
-            n2 = (current_time + n)%in_a_bar
-            n1 = n - n2
+        if n - int(n) == 0.5: # This might need to go somewhere else
+            n = int(n*2/3) ##################################
+            add = "." #######################################
+        while (current_time + n)//in_a_bar > current_bar:
+            n1 = in_a_bar - current_time%in_a_bar
+            n = n - n1
+            if current_time - int(current_time) == 0.5:
+                
             text += n1
             text += note.get_pitch()
-            text += n2
-        else:
-            if n - int(n) == 0.5: # This might need to go somewhere else
-                n = int(n*2/3) ##################################
-                add = "." #######################################
-            text += str(int(base/n)) + add
+            
+
+        text += str(int(base/n)) + add
         

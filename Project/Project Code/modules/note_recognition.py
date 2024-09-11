@@ -9,7 +9,7 @@ from os import getcwd
 
 import sys
 
-sys.path.append(getcwd()+"\\Project Code")
+sys.path.append(getcwd()+"\\Project\\Project Code")
 
 from classes.Notes import Note
 
@@ -202,6 +202,9 @@ def STFT(data, window_size, hop_size, sample_frequency):
         else:
             current_note.set_end(time[i])
             current_note = filler_note
+
+    for note in Note.notes:
+        print(note)
 
     # for note in Note.notes:
     #     print(note)

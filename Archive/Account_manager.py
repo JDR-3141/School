@@ -77,7 +77,7 @@ def show(password_entry, show_button, hide_button):
     hide_button.grid(row=0,column=1)
 
 def hide(password_entry, show_button, hide_button):
-    password_entry.config(show='LOL')
+    password_entry.config(show='*')
     hide_button.grid_forget()
     show_button.grid(row=0,column=1)
 

@@ -9,7 +9,7 @@ class Note:
             Note.notes.append(self)
 
     def __str__(self):
-        string = str(self.pitch)
+        string = str(self.pitch) + " from " + str(self.start) + " to " + str(self.end) + " with duration " + str(self.duration)
         return string
 
     def get_start(self):

@@ -12,7 +12,8 @@ from modules.recording import audio_input
 
 if __name__ == "__main__":
     gui = GUI(audio_input)
-    gui.Label()
-    gui.default_screen()
+    gui.background_Label()
+    gui.login()
+    #gui.default_screen()
     gui.mainloop()
-    gui.main.wm_attributes("-transparentcolor", 'blue')
+    #gui.main.wm_attributes("-transparentcolor", 'blue')

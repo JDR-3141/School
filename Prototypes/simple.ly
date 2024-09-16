@@ -8,6 +8,6 @@
 }
 {
   \clef treble
-  \time 4/4
-  c'2. f'4. g'1 c'2..
+  \time 3/8
+  c'8. f'2 g'4..
 }

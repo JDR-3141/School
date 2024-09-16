@@ -29,7 +29,7 @@ class GUI(tk.Tk):
         menu.add_cascade(label="Options", menu = item)
         self.config(menu=menu)
         #self.login()
-        print("CADENZA VERSION 0.07689")
+        #print("CADENZA VERSION 0.07689")
 
 
     def background_Label(self):

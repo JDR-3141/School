@@ -33,7 +33,7 @@ def validate_signup(username_entry, password_entry):
     userid = username_entry.get()
     password = password_entry.get()
     errors = []
-    conn = sqlite3.connect(getcwd()+"\\accounts.db")
+    conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\accounts.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * from Users WHERE Username=?;''',[userid,])
     result = cursor.fetchall()

@@ -1,7 +1,7 @@
 from os import getcwd
 import sqlite3
 
-print(getcwd())
+#print(getcwd())
 
 class User():
     users = []
@@ -14,7 +14,7 @@ class User():
 
     def save(self):
         #create database connection
-        conn = sqlite3.connect(getcwd()+"\\accounts.db")
+        conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\Files.db")
         cursor = conn.cursor()
         cursor.execute("INSERT INTO Users (Username, Password, Email, Date) VALUES (?,?,?,?)",
                 (

@@ -1,11 +1,13 @@
 
 \version "2.12.3"
-\relative
+\new Voice \with {
+  \remove Note_heads_engraver
+  \consists Completion_heads_engraver
+  \remove Rest_engraver
+  \consists Completion_rest_engraver
+}
 {
-    \clef treble
-    \time 4/4
-    \tempo "Swing" 4 = 100
-    \key g \minor
-    g'8 a bes c a4 f8 g8~
-    2 r2
+  \clef treble
+  \time 3/8
+  c'8. f'2 g'4..
 }

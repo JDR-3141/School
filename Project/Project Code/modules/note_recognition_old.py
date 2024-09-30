@@ -72,6 +72,45 @@ def quadratic_interpolation(magnitude_spectrum, bin_index):
     p = 0.5 * (alpha - gamma) / (alpha - 2 * beta + gamma)
     return bin_index + p
 
+# def HPS(fft_output, sample_frequency, window_size):
+#     frequency_resolution = sample_frequency/window_size
+#     magnitude_spectrum = np.abs(fft_output[:fft_output.size//2])
+#     for i in range(int(62/frequency_resolution)):
+#         magnitude_spectrum[i] = 0
+
+#     octaves = [50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600]
+#     for i in range(len(octaves)-1):
+#         start = int(octaves[i]/frequency_resolution)
+#         end = int(octaves[i+1]/frequency_resolution)
+#         end = end if end < magnitude_spectrum.size else magnitude_spectrum.size
+#         average_magnitude = ((np.linalg.norm(magnitude_spectrum[start:end], ord=2)**2)/(end-start))**0.5
+#         for i in range(start, end):
+#             magnitude_spectrum[i] = magnitude_spectrum[i] if magnitude_spectrum[i] > 0.2*average_magnitude else 0
+
+#     #print(magnitude_spectrum)
+
+#     interpolated_output = np.interp(np.arange(0, len(magnitude_spectrum), 1/HPS_number), np.arange(0, len(magnitude_spectrum)), magnitude_spectrum)
+#     interpolated_output = interpolated_output / np.linalg.norm(interpolated_output, ord=2)
+#     hps_spectrum = deepcopy(interpolated_output)
+
+#     for i in range(HPS_number):
+#         temp_hps_array = np.multiply(hps_spectrum[:int(np.ceil(len(interpolated_output)/(i+1)))], interpolated_output[::(i+1)])
+#         if not any(temp_hps_array):
+#             break
+#         hps_spectrum = temp_hps_array
+#         # decimated = fft_output[::i]
+#         # hps_array[:len(decimated)] *= decimated
+
+#     # hps_array_abs = np.abs(hps_array)
+#     max_bin = np.argmax(hps_spectrum)
+
+#         # Apply quadratic interpolation
+
+
+#     max_frequency = max_bin * frequency_resolution / HPS_number
+#     return max_frequency
+    ##################################### WORK HERE NEXT!!!! 
+
 def HPS(fft_output, sample_frequency, window_size):
     frequency_resolution = sample_frequency / window_size
     magnitude_spectrum = np.abs(fft_output[:fft_output.size // 2])
@@ -97,6 +136,17 @@ def HPS(fft_output, sample_frequency, window_size):
     return max_frequency
 
 
+# def change_format(frequency_bins, sample_frequency):
+#     N = frequency_bins.size
+#     frequency_bins = frequency_bins[:N//2]
+#     frequency_resolution = sample_frequency/N
+#     frequency_bins_list = [frequency_resolution*i for i in range(N//2)]
+#     f = lambda x: round(abs(x)*2/N, 3)
+#     vf = np.vectorize(f)
+#     frequency_bins_magnitude  = vf(frequency_bins)
+#     return frequency_bins_list, frequency_bins_magnitude # outputs a list of frequencies and a numpy array of magnitudes
+
+
 def next_power_of_two(x):
     return 1 if x == 0 else 2**(x - 1).bit_length()
 
@@ -104,6 +154,10 @@ def pad_to_power_of_two(complex_vector):
     N = len(complex_vector)
     next_pow2 = next_power_of_two(N)
     return np.pad(complex_vector, (0, next_pow2 - N), 'constant') if N < next_pow2 else complex_vector
+
+# def apply_window(segment, window):
+#     return [s * w for s, w in zip(segment, window)]
+
 
 def STFT(data, window_size, hop_size, sample_frequency):
     window = np.hanning(window_size)
@@ -148,3 +202,40 @@ def STFT(data, window_size, hop_size, sample_frequency):
         else:
             current_note.set_end(time[i])
             current_note = filler_note
+
+    for note in Note.notes:
+        print(note)
+
+    # for note in Note.notes:
+    #     print(note)
+
+
+    #return time, stft_result
+
+# samplerate, data = wavfile.read('test_audio.wav')
+# samplerate, data1 = wavfile.read('test_audio1.wav')
+# result_lt = np.concatenate((data, data1))
+# wavfile.write('test_audio2.wav', samplerate, result_lt)
+samplerate, result_lt = wavfile.read('test.wav')
+STFT(result_lt, 1024, 512, samplerate)
+#result_lt = result_lt / np.max(np.abs(result_lt))
+########x, frequency_bins = STFT(result_lt, 1024, 512, samplerate)
+########x = np.array(x)
+########frequency_bins = np.array(frequency_bins)
+
+
+########plt.scatter(x, frequency_bins)
+
+########plt.yscale('log')
+
+########plt.ylim(10, 4500)
+
+########plt.show()
+# plt.figure(figsize=(10, 6))
+# for i, frame in enumerate(frequency_bins):
+#     plt.plot([f[0] for f in frame], [f[1] for f in frame], label=f'Frame {i}')
+# plt.xlabel('Frequency (Hz)')
+# plt.ylabel('Magnitude')
+# plt.title('STFT Magnitude Spectrum')
+# plt.legend()
+# plt.show()

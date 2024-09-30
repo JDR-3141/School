@@ -10,7 +10,7 @@ from classes.Users import User
 def validate_login(username_entry, password_entry):
     userid = username_entry.get()
     password = password_entry.get()
-    conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\accounts.db")
+    conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\Files.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * from Users WHERE Username=?;''',[userid,])
     names = list(map(lambda x: x[0], cursor.description))
@@ -33,7 +33,7 @@ def validate_signup(username_entry, password_entry):
     userid = username_entry.get()
     password = password_entry.get()
     errors = []
-    conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\accounts.db")
+    conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\Files.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * from Users WHERE Username=?;''',[userid,])
     result = cursor.fetchall()

@@ -31,6 +31,9 @@ class User():
         conn.close()
         #load_from_db()
 
+    def get_username(self):
+        return self.username
+
 def loadUser(data):
     User(data[0], data[1], data[2], data[3], data[4], data[5])
 

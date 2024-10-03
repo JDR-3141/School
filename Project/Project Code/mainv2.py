@@ -17,5 +17,3 @@ if __name__ == "__main__":
     #gui.default_screen()
     gui.mainloop()
     #gui.main.wm_attributes("-transparentcolor", 'blue')
-
-    

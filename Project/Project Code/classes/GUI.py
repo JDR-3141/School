@@ -191,9 +191,9 @@ class GUI(tk.Tk):
         files = tk.Listbox(self, selectmode = "single",yscrollcommand = yscrollbar.set)
         files.pack(padx = 10, pady = 10, expand = tk.YES, fill = "both")
         for item in range(len(result)):
-            files.insert(tk.END, choices[item])
+            files.insert(tk.END, choices[item][1])
         yscrollbar.config(command = files.yview)
-        button = self.Button(self, text = "Open", command = lambda:function(files.curselection()[0]))
+        button = self.Button(self, text = "Open", command = lambda:function(choices[files.curselection()[0]]))
         button.pack(fill = "x", side = "bottom")
 
     def add_take(self, take):

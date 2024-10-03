@@ -29,19 +29,20 @@ class Take:
         write(self.file, self.fs, self.audio)
 
     def choose_take(self, song):
-        conn = sqlite3.connect(getcwd()+"\\Files.db")
+        conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\Files.db")
         cursor = conn.cursor()
-        cursor.execute('''SELECT Take FROM Takes WHERE Projectname = ?''', (song,),)
+        cursor.execute('''SELECT Audio_filename, Takenum FROM Takes WHERE SongID = ?''', (song[0],),)
         result = cursor.fetchall()
         conn.commit()
         conn.close
         self.gui.choose(result, self.get_notes)
 
     def choose_song(self):
-        conn = sqlite3.connect(getcwd()+"\\Files.db")
+        conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\Files.db")
         cursor = conn.cursor()
-        cursor.execute('''SELECT Projectname FROM Songs WHERE Creator = ?''', (self.user,),)
+        cursor.execute('''SELECT SongID, Projectname FROM Songs WHERE Creator = ?''', (self.user.get_username(),),)
         result = cursor.fetchall()
+        print(result)
         conn.commit()
         conn.close()
         self.gui.choose(result, self.choose_take)
@@ -50,7 +51,7 @@ class Take:
 
     def get_notes(self, file=False):
         if file:
-            self.file = file
+            self.file = file[0]
         self.fs, self.data = read(self.file)
         self.STFT(self.data, 1024, 512, self.fs)
         

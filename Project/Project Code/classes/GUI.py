@@ -199,6 +199,55 @@ class GUI(tk.Tk):
     def add_take(self, take):
         self.take = take
 
+    def note_gui(self):
+        for widget in self.winfo_children():
+            if type(widget) != tk.Menu:
+                widget.destroy()
+
+        # Create a frame to hold the canvas and scrollbar
+        canvas_frame = self.Frame(self)
+        canvas_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Create a canvas widget
+        self.canvas = tk.Canvas(canvas_frame, bg=GUI.colour_palette["bgblue"])
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Create a horizontal scrollbar linked to the canvas (optional)
+        h_scrollbar = tk.Scrollbar(canvas_frame, orient=tk.HORIZONTAL, command=self.canvas.xview)
+        h_scrollbar.pack(side=tk.BOTTOM, fill=tk.X)
+        self.canvas.configure(xscrollcommand=h_scrollbar.set)
+
+        # Create a frame inside the canvas to hold the content
+        # self.content_frame = tk.Frame(self.canvas, bg=GUI.colour_palette["bgblue"])
+        # self.canvas.create_window((0, 0), window=self.content_frame, anchor="nw")
+
+        # Configure the canvas to resize with the window
+        self.content_frame.bind("<Configure>", self.on_frame_configure)
+    
+        for line in range(40,480,int(480/24)):
+            colour_ref = {0:"grey", 20:"grey", 40:"black", 60:"grey"}
+            note_ref = {0:"e",20:"d",40:"c",60:"b",80:"a",100:"g",120:"f"}
+            octave_ref = {-1:"5",0:"4",1:"3",2:"2"}
+            self.canvas.create_line(0,line,480,line,fill="grey")
+            self.canvas.create_line(line,0,line,480,fill=colour_ref[line%80])
+            self.canvas.create_text(line+10,20,text=str(int(line/20)-1))
+            self.canvas.create_text(20,line+10,text=note_ref[line%140]+octave_ref[(line-60)//140])
+
+    #<140=0
+    #140-280=1
+    #280-420=2
+    #420=3
+    
+    #140, 140, 140
+    def add_note(canvas, start, end, pitch):
+        note_ref={"c":0,"d":20,"e":40,"f":60,"g":80,"a":100,"b":120}
+        octave_ref={"2":0,"3":140,"4":280,"5":420}
+        canvas.create_rectangle(start*20+20, 480-note_ref[pitch[0]]-octave_ref[pitch[1]]\
+                , end*20+40, 480-note_ref[pitch[0]]-octave_ref[pitch[1]]-20, fill="grey")
+
+    def on_frame_configure(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))        
+
 # gui = GUI(None)
 # gui.check_audio()
 # gui.mainloop()

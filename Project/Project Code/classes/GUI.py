@@ -1,18 +1,19 @@
 import tkinter as tk
 from os import getcwd
-
+from time import sleep
 import sys
 
 sys.path.append(getcwd()+"\\Project\\Project Code")
 
-from classes.Takes import Take
-from modules.login import *
+#from classes.Takes import Take
+from modules.login import validate_login, validate_signup
 
 
 class GUI(tk.Tk):
 
     colour_palette = {"bgteal": "#BEE9E8", "bgblue": "#CAE9FF", "fgteal": "#62B6CB", "fgblue": "#5FA8D3", "dark": "#1B4965"}
     name = "Cadenza"
+    gui = None
 
     def __init__(self, audio_input):
         super().__init__()
@@ -21,6 +22,7 @@ class GUI(tk.Tk):
         self.title(GUI.name)
         self.configure(bg = GUI.colour_palette["bgblue"])
         self.audio_input = audio_input
+        GUI.gui = self 
 
         menu = tk.Menu(self)
         item = tk.Menu(menu)
@@ -40,8 +42,11 @@ class GUI(tk.Tk):
         self.titleLabel.pack(side=tk.TOP)
 
 
-    def Label(self, parent, text):
-        label = tk.Label(parent, text = text, background = GUI.colour_palette["bgblue"])
+    def Label(self, parent, text, variable=False):
+        if variable:
+            label = tk.Label(parent, textvariable = text, background = GUI.colour_palette["bgblue"])
+        else: 
+            label = tk.Label(parent, text = text, background = GUI.colour_palette["bgblue"])
         return label
 
     def Button(self, parent, text, command):
@@ -50,9 +55,9 @@ class GUI(tk.Tk):
             button.configure(command=command)
         return button
     
-    def Frame(self, parent):
+    def Frame(self, parent, colour):
         frame = tk.Frame(parent)
-        frame.configure(bg = GUI.colour_palette["bgblue"])
+        frame.configure(bg = GUI.colour_palette[colour])
         return frame
     
     def Entry(self, parent, width, show):
@@ -61,25 +66,65 @@ class GUI(tk.Tk):
             entry.configure(width=width)
         return entry
 
-    def default_screen(self):
+    def import_audio(self):
+        from classes.Users import User
         for widget in self.winfo_children():
             if type(widget) != tk.Menu:
                 widget.destroy()
 
         self.background_Label()
 
-        frame2 = tk.Frame(self)
-        frame2.configure(bg = GUI.colour_palette["bgblue"])
+        frame2 = GUI.Frame(self, self, "bgblue")
         frame2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         # Create and place the record button
-        record_button = self.Button(frame2,"Record", lambda: self.audio_input(True, self, Take))
+        record_button = self.Button(frame2,"Record", lambda: self.audio_input(True, self, User.user))
         record_button.grid(row=0,column=1,padx=(5, 5))
 
 
         # Create and place the choose button
-        choose_button = self.Button(frame2,"Choose",lambda: self.audio_input(False, self, Take))
+        choose_button = self.Button(frame2,"Choose",lambda: self.audio_input(False, self, User.user))
         choose_button.grid(row=0,column=0,padx=(5, 5))
+
+    def count(self):
+        for widget in self.winfo_children():
+            if type(widget) != tk.Menu:
+                widget.destroy
+
+        self.background_Label()
+        
+        count_var = tk.StringVar()
+        n = 1
+        count_var.set(str(n))
+        count = GUI.Label(self, count_var, True)
+        count.pack()
+
+        for i in range(self.take.get_time(0)):
+           sleep(60/self.take.get_tempo())
+           n += 1
+           count_var.set(str(n))
+        ## Add here later
+
+    def check_audio(self):
+        for widget in self.winfo_children():
+            if type(widget) != tk.Menu:
+                widget.destroy
+
+        self.background_Label()
+
+        outerframe = self.Frame(self, "bgblue")
+        outerframe.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        audio_player = self.Frame(outerframe, "fgblue")
+        audio_player.grid(row=0,column=0,padx=(5, 5))
+
+        # Create and place the play button
+        play_button = self.Button(audio_player,"Play", lambda: print("yay")) #lambda: self.audio_input.play_audio(self.audio_input.audio_file_path, self))
+        play_button.grid(row=0,column=0,padx=(5, 5))
+
+
+
+
 
     def show(self, password_entry, show_button, hide_button):
         password_entry.config(show='')
@@ -112,8 +157,7 @@ class GUI(tk.Tk):
         password_label = self.Label(self, text="Password:")
         password_label.pack()
 
-        frame1 = self.Frame(self)
-        frame1.configure(bg = GUI.colour_palette["bgblue"])
+        frame1 = self.Frame(self, "bgblue")
         frame1.pack()
 
         password_entry = self.Entry(frame1, 14, "*")  # Show asterisks for password
@@ -137,7 +181,7 @@ class GUI(tk.Tk):
         signin_button.grid(row=0,column=0,padx=(5, 5))
 
 
-    def choose(self, choices):
+    def choose(self, choices, function):
         for widget in self.winfo_children():
             if type(widget) != tk.Menu:
                 widget.destroy()
@@ -149,8 +193,12 @@ class GUI(tk.Tk):
         for item in range(len(result)):
             files.insert(tk.END, choices[item])
         yscrollbar.config(command = files.yview)
-        button = self.Button(self, text = "Open", command = lambda:self.take.get_notes(files.curselection()[0]))
+        button = self.Button(self, text = "Open", command = lambda:function(files.curselection()[0]))
         button.pack(fill = "x", side = "bottom")
 
     def add_take(self, take):
         self.take = take
+
+# gui = GUI(None)
+# gui.check_audio()
+# gui.mainloop()

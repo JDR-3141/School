@@ -148,3 +148,4 @@ def STFT(data, window_size, hop_size, sample_frequency):
         else:
             current_note.set_end(time[i])
             current_note = filler_note
+

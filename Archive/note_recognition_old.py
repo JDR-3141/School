@@ -1,3 +1,4 @@
+######################### If you want this to work you need to put it back in Project / Project Code / Modules
 import cmath
 from numpy import pi
 import matplotlib.pyplot as plt
@@ -8,6 +9,7 @@ from tkinter import messagebox
 from os import getcwd
 
 import sys
+
 
 sys.path.append(getcwd()+"\\Project\\Project Code")
 

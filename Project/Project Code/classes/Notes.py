@@ -2,7 +2,7 @@ class Note:
     notes = []
     time = 0
 
-    def __init__(self, start,pitch):
+    def __init__(self, start, pitch):
         self.start = start
         self.pitch = pitch
         if self.start != None:

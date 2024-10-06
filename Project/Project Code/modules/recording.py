@@ -8,4 +8,4 @@ def audio_input(recording, gui, user):
         new_take.record()
     else:
         new_take.choose_song()
-    new_take.get_notes()
+    #new_take.get_notes()

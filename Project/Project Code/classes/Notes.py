@@ -22,6 +22,9 @@ class Note:
     def get_end(self):
         return self.end
     
+    def get_duration(self):
+        return self.duration
+    
     def set_end(self, new):
         self.end = new
         if self.start != None:

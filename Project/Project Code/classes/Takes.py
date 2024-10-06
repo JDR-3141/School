@@ -8,7 +8,8 @@ import sys
 sys.path.append(getcwd()+"\\Project\\Project Code")
 
 #from modules.note_recognition import STFT
-from classes.Users import User
+# from classes.Notes import Note
+# from modules.lilypond import convert
 
 class Take:
 
@@ -21,28 +22,30 @@ class Take:
         self.time = time
         self.STFT = STFT
         self.user = user
+        self.key = None
         
     def record(self):
         self.audio = sd.rec(int(self.seconds*self.fs), samplerate=self.fs, channels=1)
         sd.wait()
-        self.file = getcwd()+"\\"+self.user+"\\"+self.song+"\\"+self.take+".wav"
+        self.file = getcwd()+"\\Project\\Assets\\"+self.user+"-"+self.song+"-Take"+self.take+".wav"
         write(self.file, self.fs, self.audio)
+        self.get_notes()
 
     def choose_take(self, song):
         conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\Files.db")
         cursor = conn.cursor()
-        cursor.execute('''SELECT Audio_filename, Takenum FROM Takes WHERE SongID = ?''', (song[0],),)
-        result = cursor.fetchall()
+        cursor.execute('''SELECT Audio_filename, Takenum, Time, Tempo, Key_note, Key_tonality FROM Takes WHERE SongID = ?''', (song[0],),)
+        self.song = song[1]
+        self.result = cursor.fetchall()
         conn.commit()
         conn.close
-        self.gui.choose(result, self.get_notes)
+        self.gui.choose(self.result, self.get_notes)
 
     def choose_song(self):
         conn = sqlite3.connect(getcwd()+"\\Project\\Assets\\Files.db")
         cursor = conn.cursor()
         cursor.execute('''SELECT SongID, Projectname FROM Songs WHERE Creator = ?''', (self.user.get_username(),),)
         result = cursor.fetchall()
-        print(result)
         conn.commit()
         conn.close()
         self.gui.choose(result, self.choose_take)
@@ -51,9 +54,20 @@ class Take:
 
     def get_notes(self, file=False):
         if file:
-            self.file = file[0]
+            self.file = getcwd() + "\\Project\\Assets\\" +file[0]
+            # print(file[0])
+            # print(self.result)
+            self.time = file[2]
+            self.tempo = file[3]
+            self.key = file[4] + " " + file[5]
         self.fs, self.data = read(self.file)
-        self.STFT(self.data, 1024, 512, self.fs)
+        self.text = self.STFT(self.data, 1024, 512, self.fs, self)
+        #self.text = convert(Note.notes())
+        print(self.text)
+
+    def get_key(self):
+        return self.key
+    
         
 
     def set_audio(self, new):

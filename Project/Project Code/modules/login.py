@@ -5,7 +5,8 @@ import sys
 
 sys.path.append(getcwd()+"\\Project\\Project Code")
 
-from classes.Users import User
+from classes.Users import User, loadUser
+#from classes.GUI import GUI
 
 def validate_login(username_entry, password_entry):
     userid = username_entry.get()
@@ -17,14 +18,14 @@ def validate_login(username_entry, password_entry):
     result = cursor.fetchall()
     conn.commit()
     conn.close()
-    print(result)
-    print(names)
+    #print(result)
+    #print(names)
     if len(result) == 0:
         messagebox.showerror("Error", "No such user")
     elif result[0][1] == password:
         messagebox.showinfo("Success", "Logged in as " + userid)
-        global logged_in
-        logged_in = userid
+        loadUser(result[0])
+        import_audio()
     else:
         messagebox.showerror("Error", "Incorrect password")
 
@@ -65,7 +66,7 @@ def validate_signup(username_entry, password_entry):
                 break
         if not res:
             errors.append(["Password", "Password must contain at least 1 uppercase letter"])
-    print(errors)
+    #print(errors)
     if len(errors) != 0:
         first = ""
         second = ""
@@ -77,5 +78,10 @@ def validate_signup(username_entry, password_entry):
         second = second.rstrip("\n")
         messagebox.showerror(first, second)
     else:
-        User(userid, password)
-        messagebox.showinfo("Success", "User successfully created")
+        temp = User(userid, password)
+        temp.save()
+        messagebox.showinfo("Success", "User successfully created")#
+
+def import_audio():
+    from classes.GUI import GUI
+    GUI.gui.import_audio()

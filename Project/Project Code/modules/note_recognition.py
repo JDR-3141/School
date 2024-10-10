@@ -12,6 +12,7 @@ import sys
 sys.path.append(getcwd()+"\\Project\\Project Code")
 
 from classes.Notes import Note
+from modules.lilypond import convert
 
 
 global HPS_number
@@ -105,7 +106,7 @@ def pad_to_power_of_two(complex_vector):
     next_pow2 = next_power_of_two(N)
     return np.pad(complex_vector, (0, next_pow2 - N), 'constant') if N < next_pow2 else complex_vector
 
-def STFT(data, window_size, hop_size, sample_frequency):
+def STFT(data, window_size, hop_size, sample_frequency, take):
     window = np.hanning(window_size)
     stft_result = []
     time = []
@@ -148,3 +149,6 @@ def STFT(data, window_size, hop_size, sample_frequency):
         else:
             current_note.set_end(time[i])
             current_note = filler_note
+
+    text = convert(take)
+    return text

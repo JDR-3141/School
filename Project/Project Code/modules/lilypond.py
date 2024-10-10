@@ -4,7 +4,7 @@
 
 
 
-# from classes.Takes import Take
+from classes.Notes import Note
 from math import log
 
 
@@ -34,7 +34,7 @@ def convert(take):
     base = take.get_time(1)
     current_time = 1
     current_bar = 1
-    for note in take.Notes:
+    for note in Note.notes:
         text += str(note.get_pitch())
         d = note.get_duration()
         x = highestPowerof2(d)

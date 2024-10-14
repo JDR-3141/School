@@ -19,7 +19,7 @@ def highestPowerof2(n):
 
 def convert(take):
     text = """
-\\version "2.12.3"
+\\version "2.25.12"
 \\new Voice \\with {
   \\remove Note_heads_engraver
   \\consists Completion_heads_engraver
@@ -35,17 +35,17 @@ def convert(take):
     current_time = 1
     current_bar = 1
     for note in Note.notes:
-        text += str(note.get_pitch())
+        text += str(note.get_pitch(True))
         d = note.get_duration()
         x = highestPowerof2(d)
-        text += str(base//x)
+        text += str(int(base//x))
         dots = log(1-d/(2*x), 0.5)-1
         while int(dots) != dots:
             text += "~ "
-            text += str(note.get_pitch())
+            text += str(note.get_pitch(True))
             d -= x
             x = highestPowerof2(d)
-            text += str(base//x)
+            text += str(int(base//x))
             dots = log(1-d/(2*x), 0.5)-1
         for i in range(int(dots)):
             text += "."

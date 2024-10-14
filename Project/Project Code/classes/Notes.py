@@ -30,7 +30,24 @@ class Note:
         if self.start != None:
             self.duration = self.end - self.start
 
-    def get_pitch(self):
+    def get_pitch(self, mode=False):
+        if mode:
+            text = self.pitch[0:-1].lower()
+            octave = int(self.pitch[-1])
+            if octave > 4:
+                for i in range(octave - 4):
+                    text += "'"
+                    if text[0] != "c":
+                        text += "'"
+            elif octave < 4:
+                for i in range(4 - octave):
+                    text += ","
+                    if text[0] != "c":
+                        text = text.rstrip(",")
+            else:
+                if text[0] != "c":
+                    text += "'"
+            return text
         return self.pitch
     
     def set_pitch(self, new):

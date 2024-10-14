@@ -106,7 +106,13 @@ def pad_to_power_of_two(complex_vector):
     next_pow2 = next_power_of_two(N)
     return np.pad(complex_vector, (0, next_pow2 - N), 'constant') if N < next_pow2 else complex_vector
 
+def translate(time, take, precision):
+    unrounded = time*take.get_tempo()/60
+    rounded = round(unrounded/precision) * precision
+    return rounded + 1
+
 def STFT(data, window_size, hop_size, sample_frequency, take):
+    precision = 0.25
     window = np.hanning(window_size)
     stft_result = []
     time = []
@@ -143,12 +149,17 @@ def STFT(data, window_size, hop_size, sample_frequency, take):
     for i in range(len(stft_result)):
         if stft_result[i] != 0:
             if current_note.get_pitch() != stft_result[i]:
-                Note(time[i], stft_result[i])
-                current_note.set_end(time[i])
+                Note(translate(time[i], take, precision), stft_result[i])
+                current_note.set_end(translate(time[i], take, precision))
                 current_note = Note.notes[-1]
         else:
-            current_note.set_end(time[i])
+            current_note.set_end(translate(time[i], take, precision))
             current_note = filler_note
+
+    for note in range(len(Note.notes)-1, -1, -1):
+        if Note.notes[note].get_duration() < precision:
+            Note.notes.pop(note)
+
 
     text = convert(take)
     return text

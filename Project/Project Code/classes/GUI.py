@@ -3,6 +3,7 @@ from os import getcwd
 from time import sleep
 import sys
 
+
 sys.path.append(getcwd()+"\\Project\\Project Code")
 
 #from classes.Takes import Take
@@ -65,6 +66,73 @@ class GUI(tk.Tk):
         if width != False:
             entry.configure(width=width)
         return entry
+    
+    def recording_screen(self):
+        for widget in self.winfo_children():
+            if type(widget) != tk.Menu:
+                widget.destroy()
+
+        self.background_Label()
+
+        # Create a frame for the inputs
+        input_frame = self.Frame(self, "bgblue")
+        input_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        song_name_label = self.Label(input_frame, text="Song Name:")
+        song_name_label.grid(row=0, column=0, pady=5, padx=5)
+        song_name_entry = self.Entry(input_frame, width=20, show="")
+        song_name_entry.grid(row=0, column=1, pady=5, padx=5)
+
+        tempo_label = self.Label(input_frame, text="Tempo:")
+        tempo_label.grid(row=1, column=0, pady=5, padx=5)
+        tempo_entry = self.Entry(input_frame, width=10, show="")
+        tempo_entry.grid(row=1, column=1, pady=5, padx=5)
+
+        key_label = self.Label(input_frame, text="Key:")
+        key_label.grid(row=2, column=0, pady=5, padx=5)
+        key_note_var = tk.StringVar(value="C")
+        key_note_dropdown = tk.OptionMenu(input_frame, key_note_var, "C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#", "Ab", "A", "A#", "Bb", "B")
+        key_note_dropdown.grid(row=2, column=1, pady=5, padx=5)
+
+        tonality_var = tk.StringVar(value="Major")
+        tonality_dropdown = tk.OptionMenu(input_frame, tonality_var, "Major", "Minor")
+        tonality_dropdown.grid(row=2, column=2, pady=5, padx=5)
+
+        time_sig_label = self.Label(input_frame, text="Time Signature:")
+        time_sig_label.grid(row=3, column=0, pady=5, padx=5)
+        top_var = tk.StringVar(value="4")
+        top_dropdown = tk.OptionMenu(input_frame, top_var, "2", "3", "4", "5", "6", "7", "8")
+        top_dropdown.grid(row=3, column=1, pady=5, padx=5)
+
+        bottom_var = tk.StringVar(value="4")
+        bottom_dropdown = tk.OptionMenu(input_frame, bottom_var, "1", "2", "4", "8", "16")
+        bottom_dropdown.grid(row=3, column=2, pady=5, padx=5)
+
+        time_label = self.Label(input_frame, text="Bars to record:")
+        time_label.grid(row=4, column=0, pady=5, padx=5)
+        time_entry = self.Entry(input_frame, width=20, show="")
+        time_entry.grid(row=4, column=1, pady=5, padx=5)
+
+
+        # Record Button
+        def on_record():
+            song_name = song_name_entry.get()
+            tempo = tempo_entry.get()
+            key_note = key_note_var.get()
+            tonality = tonality_var.get()
+            time_signature = (top_var.get(), bottom_var.get())
+            bars = time_entry.get()
+
+            if song_name and tempo.isdigit() and bars.isdigit():
+                if self.take.check_song_name(song_name):
+                    self.take.record(song_name, int(tempo), key_note, tonality, time_signature, bars)
+                else:
+                    tk.messagebox.showerror("Error", "Song name already exists. Please choose a different name.")
+            else:
+                tk.messagebox.showerror("Error", "Please fill out all fields correctly")
+
+        record_button = self.Button(input_frame, text="Record", command=on_record)
+        record_button.grid(row=4, column=0, columnspan=3, pady=10)    
 
     def import_audio(self):
         from classes.Users import User
@@ -121,11 +189,7 @@ class GUI(tk.Tk):
         # Create and place the play button
         play_button = self.Button(audio_player,"Play", lambda: print("yay")) #lambda: self.audio_input.play_audio(self.audio_input.audio_file_path, self))
         play_button.grid(row=0,column=0,padx=(5, 5))
-
-
-
-
-
+        
     def show(self, password_entry, show_button, hide_button):
         password_entry.config(show='')
         show_button.grid_forget()

@@ -26,6 +26,8 @@ def find_closest_note(pitch):
 
   i = int(np.round(np.log2(pitch/CONCERT_PITCH)*12))
   closest_note = ALL_NOTES[i%12] + str(4 + (i + 9) // 12)
+  if closest_note[:-1] == "C":
+      closest_note = closest_note[:-1] + str(int(closest_note[-1])-1)
   return closest_note
 
 
@@ -95,6 +97,7 @@ def HPS(fft_output, sample_frequency, window_size):
     max_frequency = max_bin * frequency_resolution
     
     max_frequency = max_frequency if max_frequency > 62 else 0
+    max_frequency = max_frequency if max_frequency < 2094 else 0
     return max_frequency
 
 
@@ -111,7 +114,11 @@ def translate(time, take, precision):
     rounded = round(unrounded/precision) * precision
     return rounded + 1
 
-def STFT(data, window_size, hop_size, sample_frequency, take):
+def STFT(data=None, window_size=None, hop_size=None, sample_frequency=None, take=None, mode=False):
+    if mode:
+        text = convert(take)
+        return text
+    print(1)
     precision = 0.25
     window = np.hanning(window_size)
     stft_result = []
@@ -128,6 +135,8 @@ def STFT(data, window_size, hop_size, sample_frequency, take):
         stft_result.append(frequency_found)
         time.append(start*time_period)
 
+    print(2)
+
     for i in range(len(stft_result)):
         if i > 0 and i < len(stft_result) - 1:
             if abs(stft_result[i] - stft_result[i-1]) > 10 and abs(stft_result[i] - stft_result[i+1]) > 10:
@@ -142,6 +151,8 @@ def STFT(data, window_size, hop_size, sample_frequency, take):
     for i in range(len(stft_result)):
         if stft_result[i] != 0:
             stft_result[i] = find_closest_note(stft_result[i])
+
+    print(3)
 
     filler_note = Note(None, None)
     current_note = filler_note
@@ -161,5 +172,14 @@ def STFT(data, window_size, hop_size, sample_frequency, take):
             Note.notes.pop(note)
 
 
-    text = convert(take)
-    return text
+
+    # for i in range(len(Note.notes)-1, 0, -1):
+    #     if Note.notes[i].get_start() != Note.notes[i-1].get_end():
+    #         temp = Note(Note.notes[i-1].get_end(),"r")
+    #         temp.set_end(Note.notes[i].get_start())
+    #         Note.notes.insert(i, temp)
+    #         Note.notes.pop(-1)
+
+    #text = convert(take)
+    print(9)
+    #return text

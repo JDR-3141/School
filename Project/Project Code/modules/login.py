@@ -84,4 +84,5 @@ def validate_signup(username_entry, password_entry):
 
 def import_audio():
     from classes.GUI import GUI
+    GUI.gui.set_logged_in(True)
     GUI.gui.import_audio()

@@ -544,8 +544,6 @@ class GUI(tk.Tk):
         self.update_note_gui()
 
 
-
-
     def update_note_gui(self):
         self.canvas.delete("all")
         colour_ref = {0:"grey", 20:"grey", 40:"black", 60:"grey"}

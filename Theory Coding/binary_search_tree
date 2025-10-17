@@ -1,0 +1,96 @@
+class Node():
+
+    def __init__(self, data=None):
+        self.data = data
+        self.left_pointer = None
+        self.right_pointer = None
+
+    def get_data(self):
+        return self.data
+    
+    def get_left_pointer(self):
+        return self.left_pointer
+    
+    def get_right_pointer(self):
+        return self.right_pointer
+    
+    def set_data(self, data):
+        self.data = data
+
+    def set_left_pointer(self, pointer):
+        self.left_pointer = pointer
+
+    def set_right_pointer(self, pointer):
+        self.right_pointer = pointer
+
+class Binary_search_tree():
+
+    def __init__(self, root):
+        self.root = Node(root)
+
+    def get_root(self):
+        return self.root
+    
+    def set_root(self, root):
+        self.root = root
+
+    def insert(self, data):
+        new_node = Node(data)
+        result = self.search_for_insert(self.root, new_node, True)
+        print(result)
+
+    def search(self, data):
+        dummy_node = Node(data)
+        self.search_for_insert(self.root, dummy_node, False)
+
+    def search_for_insert(self, node, search, insert):
+        if node.get_data() < search.get_data():
+            if node.get_right_pointer() == None and insert == True:
+                node.set_right_pointer(search)
+                return "success"
+            else:
+                if insert == False:
+                    print(node.get_data())
+                self.search_for_insert(node.get_right_pointer(), search)
+        elif node.get_data() > search.get_data():
+            if node.get_left_pointer() == None and insert == True:
+                node.set_left_pointer(search)
+                return "success"
+            else:
+                if insert == False:
+                    print(node.get_data())
+                self.search_for_insert(node.get_left_pointer(), search)
+        else:
+            if insert == True:
+                raise Exception("That already exists")
+            else:
+                print(node.get_data())
+
+        
+
+    # def pop(self, data):
+    #     current_node = self.get_root()
+    #     if current_node.get_data() == data:
+    #         self.set_root(current_node.get_pointer())
+    #     else:
+    #         previous_node = current_node
+    #         current_node = current_node.get_pointer()
+    #         while current_node.get_data() != data and current_node != None:
+    #             current_node = current_node.get_pointer()
+    #         if current_node.get_data() == data:
+    #             previous_node.set_pointer(current_node.get_pointer())
+            
+    # def __repr__(self):
+    #     current_node = self.get_root()
+    #     string = ""
+    #     while current_node != None:
+    #         string += str(current_node.get_data()) + " -> "
+    #         current_node = current_node.get_pointer()
+    #     string = string.rstrip(" -> ")
+    #     return string
+
+tree = Binary_search_tree("Joel")
+tree.insert("Stan")
+tree.insert("Chris")
+tree.insert("Dan")
+tree.search("Stan")

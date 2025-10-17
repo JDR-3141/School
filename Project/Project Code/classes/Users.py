@@ -37,3 +37,5 @@ class User():
 def loadUser(data):
     User(data[0], data[1], data[2], data[3], data[4], data[5])
 
+# user1 = User("Test", "Pa$$w0rd")
+# print(user1.get_username())

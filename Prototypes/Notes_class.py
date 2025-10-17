@@ -10,7 +10,7 @@ class Note:
         Note.notes.append(self)
 
     def __str__(self):
-        string = self.pitch
+        string = self.pitch + " from " + str(self.start) + " to " + str(self.end)
         return string
 
     def get_start(self):
@@ -37,5 +37,5 @@ Note.time = 8
 Note(1,4,"c4")
 Note(4,4,"f5")
 Note(4,4,"e7")
-for note in Note.notes():
+for note in Note.notes:
     print(note)

@@ -1,8 +1,12 @@
 class Note:
     notes = []
     time = 0
+    pitch_list = ["c", "d", "e", "f", "g", "a", "b", "C", "D", "E", "F", "G", "A", "B"]
 
     def __init__(self, start, pitch):
+        
+        # if type(start) != int or start < 1 or pitch[0] not in Note.pitch_list:
+        #     raise ValueError("Invalid input")
         self.start = start
         self.pitch = pitch
         self.colour = "grey"
@@ -27,9 +31,12 @@ class Note:
         return self.end
     
     def get_duration(self):
+        self.duration = self.end - self.start
         return self.duration
     
     def set_end(self, new):
+        # if type(new) != int or new < self.start or new < 1:
+        #     raise ValueError("Invalid input")
         self.end = new
         if self.start != None:
             self.duration = self.end - self.start
@@ -85,8 +92,6 @@ class Note:
     def set_colour(self):
         self.colour = "grey"
 # Note.time = 8
-# Note(1,4,"c4")
-# Note(4,4,"f5")
-# Note(4,4,"e7")
-# for note in Note.notes:
-#     print(note)
+# n = Note("s","#")
+# n.set_end("d+s")
+# print(n)

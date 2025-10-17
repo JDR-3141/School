@@ -1,4 +1,4 @@
-def save(filepath, load=False):
+def save(filepath, load=False): # Load parameter determines whether to save or load
     if load:
         with open(filepath, "r") as f:
             raw_notes = f.readlines()
@@ -17,13 +17,14 @@ def save(filepath, load=False):
         text = text.rstrip("\n")
         with open(filepath, "w") as f:
             f.write(text)
-    return notes
+    return notes # Notes are returned independent of whether they are saved or loaded
 
 def get_notes():
-    from classes.Notes import Note
+    from classes.Notes import Note # local import to avoid circular import
     return Note.notes
 
 def add_note(pitch, start, end):
     from classes.Notes import Note
-    temp = Note(start, pitch)
+    temp = Note(start, pitch) # temporary variable as class list holds all notes
     temp.set_end(end)
+

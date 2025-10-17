@@ -124,7 +124,7 @@ def STFT(data=None, window_size=None, hop_size=None, sample_frequency=None, take
     stft_result = []
     time = []
     time_period = 1/sample_frequency
-    for start in range(0, data.size - window_size, hop_size):
+    for start in range(0, data.size - window_size, hop_size): # Compute FFT and HPS for each window
         segment = data[start:start + window_size]
         windowed_segment = np.multiply(segment, window)
         frequency_bins = FFT(windowed_segment)
@@ -134,7 +134,7 @@ def STFT(data=None, window_size=None, hop_size=None, sample_frequency=None, take
         frequency_found = HPS(frequency_bins, sample_frequency, window_size)
         stft_result.append(frequency_found)
         time.append(start*time_period)
-
+    time.append((start+1)*time_period)
     print(2)
 
     for i in range(len(stft_result)):
@@ -153,6 +153,7 @@ def STFT(data=None, window_size=None, hop_size=None, sample_frequency=None, take
             stft_result[i] = find_closest_note(stft_result[i])
 
     print(3)
+    stft_result.append(0)
 
     filler_note = Note(None, None)
     current_note = filler_note

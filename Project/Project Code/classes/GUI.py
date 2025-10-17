@@ -53,7 +53,7 @@ class GUI(tk.Tk):
         self.titleLabel = tk.Label(self, text = GUI.name, font = ("Arial", 30, "bold"), bg = GUI.colour_palette["bgblue"], fg = GUI.colour_palette["dark"])
         self.titleLabel.pack(side=tk.TOP)
 
-
+###################### Redefition of the Label, Button, Frame and Entry classes to include the background colour of the GUI
     def Label(self, parent, text, variable=False):
         if variable:
             label = tk.Label(parent, textvariable = text, background = GUI.colour_palette["bgblue"])
@@ -62,7 +62,8 @@ class GUI(tk.Tk):
         return label
 
     def Button(self, parent, text, command):
-        button = tk.Button(parent, text = text, background= GUI.colour_palette["fgblue"], foreground = GUI.colour_palette["dark"], activebackground = GUI.colour_palette["fgteal"], activeforeground = GUI.colour_palette["dark"], font = ("Arial", 15, "bold")) 
+        button = tk.Button(parent, text = text, background= GUI.colour_palette["fgblue"], foreground = GUI.colour_palette["dark"], activebackground = GUI.colour_palette["fgteal"],\
+                            activeforeground = GUI.colour_palette["dark"], font = ("Arial", 15, "bold")) 
         if command:
             button.configure(command=command)
         return button
@@ -78,14 +79,14 @@ class GUI(tk.Tk):
             entry.configure(width=width)
         return entry
     
-    def recording_screen(self, record, song=False, take=False):
+    def recording_screen(self, record, song=False, take=False): # screen for entering new song details
         for widget in self.winfo_children():
             if type(widget) != tk.Menu:
                 widget.destroy()
 
         self.background_Label()
 
-        # Create a frame for the inputs
+        # frame for the dropdown inputs
         input_frame = self.Frame(self, "bgblue")
         input_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
@@ -138,7 +139,7 @@ class GUI(tk.Tk):
             self.count_count = int(top_var.get())
             bars = time_entry.get()
 
-            if song_name and self.tempo.isdigit() and bars.isdigit():
+            if song_name and self.tempo.isdigit() and bars.isdigit(): # Validation of song inputs
                 args = [song_name, int(self.tempo), key_note, tonality, time_signature, bars, record]
                 if self.take.check_song_name(song_name):
                     self.count(args, "1")
@@ -206,7 +207,7 @@ class GUI(tk.Tk):
 
 
 
-    def import_audio(self):
+    def import_audio(self): # First program choice
         from classes.Users import User
         for widget in self.winfo_children():
             if type(widget) != tk.Menu:
@@ -226,7 +227,7 @@ class GUI(tk.Tk):
         choose_button = self.Button(frame2,"Existing audio",lambda: self.audio_input(False, self, User.user, False, True))
         choose_button.grid(row=0,column=0,padx=(5, 5))
 
-    def new_or_existing(self, record):
+    def new_or_existing(self, record): # Second program choice independent of third
         from classes.Users import User
         for widget in self.winfo_children():
             if type(widget) != tk.Menu:
@@ -246,7 +247,7 @@ class GUI(tk.Tk):
         choose_button = self.Button(frame2,"Existing song",lambda: self.audio_input(False, self, User.user, record))
         choose_button.grid(row=0,column=0,padx=(5, 5))
 
-    def record_or_import(self):
+    def record_or_import(self): # Third program choice independent of second
         from classes.Users import User
         for widget in self.winfo_children():
             if type(widget) != tk.Menu:
@@ -266,7 +267,7 @@ class GUI(tk.Tk):
         choose_button = self.Button(frame2,"Import",lambda: self.new_or_existing(False))
         choose_button.grid(row=0,column=0,padx=(5, 5))
 
-    def count(self, arguments, take):
+    def count(self, arguments, take): # Count in for recording
         for widget in self.winfo_children():
             if type(widget) != tk.Menu:
                 widget.destroy
@@ -332,7 +333,7 @@ class GUI(tk.Tk):
         username_entry = self.Entry(self, False, "")
         username_entry.pack()
 
-        # Create and place the password label and entry
+
         password_label = self.Label(self, text="Password:")
         password_label.pack()
 
@@ -351,16 +352,16 @@ class GUI(tk.Tk):
         frame3.configure(bg = GUI.colour_palette["bgblue"])
         frame3.pack()
 
-        # Create and place the login button
+
         login_button = self.Button(frame2, text="Log in", command=lambda: validate_login(username_entry, password_entry))
         login_button.grid(row=0,column=1,padx=(5, 5))
 
-        # Create and place the login button
+
         signin_button = self.Button(frame2, text="Sign up", command=lambda: validate_signup(username_entry, password_entry))
         signin_button.grid(row=0,column=0,padx=(5, 5))
 
 
-    def choose(self, choices, function):
+    def choose(self, choices, function): # Generic choice screen
         for widget in self.winfo_children():
             if type(widget) != tk.Menu:
                 widget.destroy()
@@ -459,17 +460,14 @@ class GUI(tk.Tk):
                     self.update_note_gui()
                     break
                     
-        # Create a frame to contain the canvas and scrollbars
         frame = tk.Frame(self, width=500, height=350)
         frame.grid(row=0, column=0, sticky="nsew")
         frame.grid_propagate(False)
 
-        # Create a canvas widget
         self.canvas = tk.Canvas(frame, bg="white", width=self.width, height=self.height)
         #self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas.grid(row=0, column=0, sticky="nsew")
 
-        # Create vertical and horizontal scrollbars linked to the canvas
         v_scrollbar = tk.Scrollbar(frame, orient=tk.VERTICAL, command=self.canvas.yview)
         #v_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         v_scrollbar.grid(row=0, column=1, sticky="ns")
@@ -478,7 +476,6 @@ class GUI(tk.Tk):
         #h_scrollbar.pack(side=tk.BOTTOM, fill=tk.X)
         h_scrollbar.grid(row=1, column=0, sticky="ew")
 
-        # Configure the canvas to work with the scrollbars
         self.canvas.configure(yscrollcommand=v_scrollbar.set, xscrollcommand=h_scrollbar.set)
 
         frame.grid_rowconfigure(0, weight=1)
@@ -489,8 +486,6 @@ class GUI(tk.Tk):
             self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
         self.canvas.bind("<Configure>", configure_scroll_region)
-
-        # Bind the click event to the content_frame
         self.canvas.bind("<Button-1>", on_content_click) ############################################################## Detection of notes clicked, make method to check validity and then change note (also add delete), link up to Lilypond, save take ti database - DONE!!!
 
         sidebar_frame = tk.Frame(self, padx=10, pady=10)

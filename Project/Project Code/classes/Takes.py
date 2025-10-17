@@ -6,6 +6,7 @@ import lilypond
 import subprocess
 import sounddevice as sd
 import shutil
+import numpy as np
 
 import sys
 
@@ -48,6 +49,9 @@ class Take: ###################################################################
         if record:
             self.audio = sd.rec(int(self.seconds*self.fs), samplerate=self.fs, channels=1)
             sd.wait()
+            count_zero = self.audio.size - np.count_nonzero(self.audio)
+            if count_zero/self.audio.size > 0.75:
+                raise Exception("No audio recorded")
             write(self.file, self.fs, self.audio)
             self.get_notes()
         else:

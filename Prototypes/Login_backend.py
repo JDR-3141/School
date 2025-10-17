@@ -33,7 +33,7 @@ def validate_login(userid, password):
     print(names)
     if len(result) == 0:
         print("No such user")
-    elif result[0][2] == password:
+    elif result[0][1] == password:
         print("Logged in as " + userid)
         global logged_in
         logged_in = userid
